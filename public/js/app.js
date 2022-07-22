@@ -2883,6 +2883,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -11830,7 +11839,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.widget-user-header{\n    background-position: center center;\n    background-size: cover;\n    height: 250px !important;\n}\n.widget-user .card-footer{\n    padding: 0;\n}\n\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.widget-user-header{\r\n    background-position: center center;\r\n    background-size: cover;\r\n    height: 250px !important;\n}\n.widget-user .card-footer{\r\n    padding: 0;\n}\r\n\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -71697,6 +71706,34 @@ var render = function () {
                       _c("th", [_vm._v(_vm._s(rh.langue))]),
                       _vm._v(" "),
                       _c("th", [_vm._v(_vm._s(rh.Commentaire))]),
+                      _vm._v(" "),
+                      _c("td", [
+                        _c(
+                          "a",
+                          {
+                            attrs: { href: "#" },
+                            on: {
+                              click: function ($event) {
+                                return _vm.viewUser(_vm.user)
+                              },
+                            },
+                          },
+                          [_c("i", { staticClass: "fa fa-eye green" })]
+                        ),
+                        _vm._v("\n                    /\n                    "),
+                        _c(
+                          "a",
+                          {
+                            attrs: { href: "#" },
+                            on: {
+                              click: function ($event) {
+                                return _vm.deleteUser(_vm.user.id)
+                              },
+                            },
+                          },
+                          [_c("i", { staticClass: "fas fa-check" })]
+                        ),
+                      ]),
                     ])
                   }),
                 ],
@@ -71732,13 +71769,15 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("tr", [
-      _c("th", [_vm._v("utilisateur")]),
+      _c("th", [_vm._v("Utilisateur")]),
       _vm._v(" "),
       _c("th", [_vm._v("Type")]),
       _vm._v(" "),
-      _c("th", [_vm._v("langue")]),
+      _c("th", [_vm._v("Langue")]),
       _vm._v(" "),
       _c("th", [_vm._v("Commentaire")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("  État")]),
     ])
   },
 ]

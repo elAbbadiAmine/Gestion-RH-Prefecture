@@ -13,17 +13,26 @@
                     <div class="card-body table-responsive p-0">
                         <table class="table table-hover">
                             <tbody>
-                                <tr>
-                                    <th>utilisateur</th>
+                                    <tr>
+                                    <th>Utilisateur</th>
                                     <th>Type</th>
-                                    <th>langue</th>
+                                    <th>Langue</th>
                                     <th>Commentaire</th>
+                                    <th>&ensp;&ensp;État</th>
                                 </tr>
                                 <tr v-for="rh in demanderh" :key="rh.utilisateur">
                                     <th>{{rh.utilisateur}}</th>
                                     <th>{{rh.type}}</th>
                                     <th>{{rh.langue}}</th>
                                     <th>{{rh.Commentaire}}</th>
+                                    <td> <a href="#" @click="viewUser(user)">
+                            <i class="fa fa-eye green"></i>
+                        </a>
+                        /
+                        <a href="#" @click="deleteUser(user.id)">
+                            <i class="fas fa-check"></i>
+                        </a> 
+                    </td>
                                 </tr>
                             </tbody>
                         </table>
