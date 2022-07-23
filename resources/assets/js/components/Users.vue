@@ -20,7 +20,7 @@
                 <button class="btn btn-outline-success" style="margin-left: 7px;" @click="getUsersByName()">Rechercher</button>
             </form>
 
-            <select  id="selectDiv" class='form-control ' v-model="form.Division" style="width: 139px;" @change="getUsersByDivs(); ">
+            <select  id="selectDiv" class='form-control ' v-model="form.Division" style="width: 140px;" @change="getUsersByDivs(); ">
                 <option disabled selected value> -- Division -- </option>
                 <option value="0"> - </option>
                 <option v-for="div in this.divisions" :key="div.id" :value="div.id">{{ div.Division }}</option>
