@@ -63,15 +63,15 @@
                 this.form.post('api/demande_rh')
                 .then(()=>{
                     swal.fire(
-                        'Success',
-                        'demande crée',
-                        'Succés'
+                        'Succès',
+                        'la Demande a été bien crée',
+                        'Succès'
                         )
                     Fire.$emit('AfterCreate');
                     $('#addNew').modal('hide')
                     toast({
                         type: 'success',
-                        title: 'demande Crée avec succés'
+                        title: ' la demande a été crée avec succés'
                         })
                 this.$Progress.finish();
                 })

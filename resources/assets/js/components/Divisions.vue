@@ -148,7 +148,7 @@ export default {
                                 this.form.delete('api/division/'+id).then(()=>{
                                         swal.fire(
                                             'Supprimé!',
-                                            'Your file has been deleted.',
+                                            'Votre fichier a été bien supprimé.',
                                             'Succès'
                                         )
                                     Fire.$emit('AfterCreate');

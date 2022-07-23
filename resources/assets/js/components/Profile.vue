@@ -255,7 +255,7 @@
                          swal({
                             type: 'error',
                             title: 'Oops...',
-                            text: 'You are uploading a large file',
+                            text: 'Vous téléchargez un gros fichier',
                         })
                     }
             }

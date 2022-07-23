@@ -115,7 +115,7 @@ class UserController extends Controller
         $user->nom = $request['nom'];
         $user->prenom = $request['prenom'];
         $user->CNE = $request['CNE'];
-        // $user->Division = $request['Division'];
+        $user->Division = $request['Division'];
         $user->Matricule = $request['Matricule'];
         $user->Sex = $request['Sex'];
         $user->Date_naissance = $request['Date_naissance'];
@@ -144,7 +144,7 @@ class UserController extends Controller
         if(!empty($request->password)){
             $request->merge(['password' => Hash::make($request['password'])]);
         }
-       // $user->update($request->all());
+        $user->update($request->all());
         return ['message' => "Success"];
     }
 
@@ -230,7 +230,6 @@ class UserController extends Controller
         }
         return ['data' => $result];
     }
-
 
     public function export(){
         return Excel::download(new UserExport, 'users.xlsx');

@@ -102,15 +102,15 @@ import { exit } from 'process';
                 this.form.post('api/demande_conge')
                 .then(()=>{
                     swal.fire(
-                        'Success',
-                        'demande created',
-                        'success'
+                        'Succès',
+                        'la demande a été bien crée',
+                        'succés'
                         )
                     Fire.$emit('AfterCreate');
                     $('#addNew').modal('hide')
                     toast({
                         type: 'success',
-                        title: 'demande Created in successfully'
+                        title: 'la demande a été crée avec succés'
                         })
                 this.$Progress.finish();
                 })

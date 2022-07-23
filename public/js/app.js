@@ -3114,12 +3114,12 @@ __webpack_require__.r(__webpack_exports__);
 
       this.$Progress.start();
       this.form.post('api/demande_conge').then(function () {
-        swal.fire('Success', 'demande created', 'success');
+        swal.fire('Succès', 'la demande a été bien crée', 'succés');
         Fire.$emit('AfterCreate');
         $('#addNew').modal('hide');
         toast({
           type: 'success',
-          title: 'demande Created in successfully'
+          title: 'la demande a été crée avec succés'
         });
 
         _this.$Progress.finish();
@@ -3212,12 +3212,12 @@ __webpack_require__.r(__webpack_exports__);
 
       this.$Progress.start();
       this.form.post('api/demande_rh').then(function () {
-        swal.fire('Success', 'demande crée', 'Succés');
+        swal.fire('Succès', 'la Demande a été bien crée', 'Succès');
         Fire.$emit('AfterCreate');
         $('#addNew').modal('hide');
         toast({
           type: 'success',
-          title: 'demande Crée avec succés'
+          title: ' la demande a été crée avec succés'
         });
 
         _this.$Progress.finish();
@@ -3396,7 +3396,7 @@ __webpack_require__.r(__webpack_exports__);
         // Send request to the server
         if (result.value) {
           _this3.form["delete"]('api/division/' + id).then(function () {
-            sweetalert2__WEBPACK_IMPORTED_MODULE_1___default().fire('Supprimé!', 'Your file has been deleted.', 'Succès');
+            sweetalert2__WEBPACK_IMPORTED_MODULE_1___default().fire('Supprimé!', 'Votre fichier a été bien supprimé.', 'Succès');
             Fire.$emit('AfterCreate');
           })["catch"](function () {
             sweetalert2__WEBPACK_IMPORTED_MODULE_1___default()("Manqué!", "Il y avait quelque chose qui n'allait pas.", "Attention");
@@ -3759,7 +3759,7 @@ __webpack_require__.r(__webpack_exports__);
         swal({
           type: 'error',
           title: 'Oops...',
-          text: 'You are uploading a large file'
+          text: 'Vous téléchargez un gros fichier'
         });
       }
     }
@@ -3938,21 +3938,21 @@ __webpack_require__.r(__webpack_exports__);
       var _this3 = this;
 
       sweetalert2__WEBPACK_IMPORTED_MODULE_1___default().fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
-        type: 'warning',
+        title: 'Êtes-vous sûr?',
+        text: "Vous ne pourrez pas revenir en arrière!",
+        type: 'Attention',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
+        confirmButtonText: 'OUI, supprimer le!'
       }).then(function (result) {
         // Send request to the server
         if (result.value) {
           _this3.form["delete"]('api/service/' + id).then(function () {
-            sweetalert2__WEBPACK_IMPORTED_MODULE_1___default().fire('Deleted!', 'Your file has been deleted.', 'success');
+            sweetalert2__WEBPACK_IMPORTED_MODULE_1___default().fire('Supprimer!', 'Votre fichier a été bien supprimer.', 'succès');
             Fire.$emit('AfterCreate');
           })["catch"](function () {
-            sweetalert2__WEBPACK_IMPORTED_MODULE_1___default()("Failed!", "There was something wronge.", "warning");
+            sweetalert2__WEBPACK_IMPORTED_MODULE_1___default()("Erreur!", "Il y avait quelque chose qui n'allait pas.", "Alert");
           });
         }
       });
@@ -3962,12 +3962,12 @@ __webpack_require__.r(__webpack_exports__);
 
       this.$Progress.start();
       this.form.post('api/service').then(function () {
-        sweetalert2__WEBPACK_IMPORTED_MODULE_1___default().fire('Success', 'service created', 'success');
+        sweetalert2__WEBPACK_IMPORTED_MODULE_1___default().fire('Succès', 'service a été bien creer', 'succès');
         Fire.$emit('AfterCreate');
         $('#addNew').modal('hide');
         toast({
           type: 'success',
-          title: 'service Created in successfully'
+          title: 'service a été bien creer'
         });
 
         _this4.$Progress.finish();
@@ -3986,7 +3986,7 @@ __webpack_require__.r(__webpack_exports__);
       this.form.put('api/service/' + this.form.id).then(function () {
         // success
         $('#addNew').modal('hide');
-        sweetalert2__WEBPACK_IMPORTED_MODULE_1___default().fire('Updated!', 'Information has been updated.', 'success');
+        sweetalert2__WEBPACK_IMPORTED_MODULE_1___default().fire('Mise à jour!', 'le service a été bien modifier', 'succès');
 
         _this5.$Progress.finish();
 
@@ -4035,6 +4035,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_0__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -4423,7 +4438,7 @@ __webpack_require__.r(__webpack_exports__);
         // Send request to the server
         if (result.value) {
           _this2.form["delete"]('api/user/' + id).then(function () {
-            sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire('Supprimé!', 'Your file has been deleted.', 'Succès');
+            sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire('Supprimé!', 'Votre utilisateur a été bien supprimer ', 'Succès');
             Fire.$emit('AfterCreate');
           })["catch"](function () {
             sweetalert2__WEBPACK_IMPORTED_MODULE_0___default()("Manqué!", "Il y avait quelque chose qui n'allait pas.", "warning");
@@ -4445,11 +4460,6 @@ __webpack_require__.r(__webpack_exports__);
       axios.get("api/loadDivs").then(function (_ref2) {
         var data = _ref2.data;
         return _this4.divisions = data.data;
-      });
-    },
-    exportExcel: function exportExcel() {
-      axios.get('api/export').then(function (res) {
-        console.log('hahahhaahahhahaahaha');
       });
     },
     createUser: function createUser() {
@@ -71290,7 +71300,7 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("h1", [_vm._v("\n    BIENVENUE\n")])
+  return _c("h1", [_vm._v("\n    Bonjour\n")])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -73978,107 +73988,172 @@ var render = function () {
   return _c("div", { staticClass: "container" }, [
     _c("div", { staticClass: "row mt-5" }, [
       _c("div", { staticClass: "col-md-12" }, [
-        _c("div", { staticClass: "card" }, [
-          _c("div", { staticClass: "card-header" }, [
-            _c("h3", { staticClass: "card-title" }, [
-              _vm._v("Liste des utilisateurs"),
+        _c(
+          "div",
+          { staticClass: "card" },
+          [
+            _c("div", { staticClass: "card-header" }, [
+              _c("h2", { staticClass: "card-title" }, [
+                _vm._v("Liste des utilisateurs"),
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "card-tools" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-success",
+                    on: { click: _vm.newModal },
+                  },
+                  [
+                    _vm._v("Ajouter "),
+                    _c("i", { staticClass: "fas fa-user-plus fa-fw" }),
+                  ]
+                ),
+                _vm._v(" "),
+                _vm._m(0),
+              ]),
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "card-tools" }, [
-              _c(
-                "button",
-                { staticClass: "btn btn-success", on: { click: _vm.newModal } },
-                [
-                  _vm._v("Ajouter "),
-                  _c("i", { staticClass: "fas fa-user-plus fa-fw" }),
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "a",
-                {
-                  staticClass: "btn btn-success white",
-                  on: { click: _vm.exportExcel },
-                },
-                [
-                  _vm._v("Export "),
-                  _c("i", { staticClass: "fa-solid fa-file-export" }),
-                ]
-              ),
-            ]),
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "card-body table-responsive p-0" }, [
-            _c("table", { staticClass: "table table-hover" }, [
-              _c(
-                "tbody",
-                [
-                  _vm._m(0),
-                  _vm._v(" "),
-                  _vm._l(_vm.users, function (user) {
-                    return _c("tr", { key: user.id }, [
-                      _c("td", [_vm._v(_vm._s(user.id))]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(user.nom))]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(user.Division))]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(user.email))]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(user.type))]),
-                      _vm._v(" "),
-                      _c("td", [
-                        _vm._v(_vm._s(_vm._f("myDate")(user.created_at))),
+            [
+              _c("div", { staticClass: "container" }, [
+                _c("div", { staticClass: "card-header" }, [
+                  _c(
+                    "select",
+                    {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.sort,
+                          expression: "sort",
+                        },
+                      ],
+                      attrs: { id: "" },
+                      on: {
+                        change: [
+                          function ($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function (o) {
+                                return o.selected
+                              })
+                              .map(function (o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.sort = $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          },
+                          _vm.sortValue,
+                        ],
+                      },
+                    },
+                    [
+                      _c("option", { attrs: { value: "1" } }, [
+                        _vm._v("Active"),
                       ]),
                       _vm._v(" "),
-                      _c("td", [
-                        _c(
-                          "a",
-                          {
-                            attrs: { href: "#" },
-                            on: {
-                              click: function ($event) {
-                                return _vm.viewUser(user)
-                              },
-                            },
-                          },
-                          [_c("i", { staticClass: "fa fa-eye green" })]
-                        ),
-                        _vm._v("\n                    /\n                    "),
-                        _c(
-                          "a",
-                          {
-                            attrs: { href: "#" },
-                            on: {
-                              click: function ($event) {
-                                return _vm.editModal(user)
-                              },
-                            },
-                          },
-                          [_c("i", { staticClass: "fa fa-edit blue" })]
-                        ),
-                        _vm._v("\n                    /\n                    "),
-                        _c(
-                          "a",
-                          {
-                            attrs: { href: "#" },
-                            on: {
-                              click: function ($event) {
-                                return _vm.deleteUser(user.id)
-                              },
-                            },
-                          },
-                          [_c("i", { staticClass: "fa fa-trash red" })]
+                      _c("option", { attrs: { value: "0" } }, [
+                        _vm._v("In-Active"),
+                      ]),
+                    ]
+                  ),
+                ]),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "card-body" },
+                  _vm._l(_vm.post, function (post) {
+                    return _c("ul", { key: post.id }, [
+                      _c("li", [
+                        _vm._v(
+                          _vm._s(post.title) + " " + _vm._s(post.active) + " "
                         ),
                       ]),
                     ])
                   }),
-                ],
-                2
-              ),
+                  0
+                ),
+              ]),
+            ],
+            _vm._v(" "),
+            _c("div", { staticClass: "card-body table-responsive p-0" }, [
+              _c("table", { staticClass: "table table-hover" }, [
+                _c(
+                  "tbody",
+                  [
+                    _vm._m(1),
+                    _vm._v(" "),
+                    _vm._l(_vm.users, function (user) {
+                      return _c("tr", { key: user.id }, [
+                        _c("td", [_vm._v(_vm._s(user.id))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(user.nom))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(user.Division))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(user.email))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(user.type))]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _vm._v(_vm._s(_vm._f("myDate")(user.updated_at))),
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _c(
+                            "a",
+                            {
+                              attrs: { href: "#" },
+                              on: {
+                                click: function ($event) {
+                                  return _vm.viewUser(user)
+                                },
+                              },
+                            },
+                            [_c("i", { staticClass: "fa fa-eye green" })]
+                          ),
+                          _vm._v(
+                            "\n                        /\n                        "
+                          ),
+                          _c(
+                            "a",
+                            {
+                              attrs: { href: "#" },
+                              on: {
+                                click: function ($event) {
+                                  return _vm.editModal(user)
+                                },
+                              },
+                            },
+                            [_c("i", { staticClass: "fa fa-edit blue" })]
+                          ),
+                          _vm._v(
+                            "\n                        /\n                        "
+                          ),
+                          _c(
+                            "a",
+                            {
+                              attrs: { href: "#" },
+                              on: {
+                                click: function ($event) {
+                                  return _vm.deleteUser(user.id)
+                                },
+                              },
+                            },
+                            [_c("i", { staticClass: "fa fa-trash red" })]
+                          ),
+                        ]),
+                      ])
+                    }),
+                  ],
+                  2
+                ),
+              ]),
             ]),
-          ]),
-        ]),
+          ],
+          2
+        ),
       ]),
     ]),
     _vm._v(" "),
@@ -74138,7 +74213,7 @@ var render = function () {
                   [_vm._v("Mettre à jour")]
                 ),
                 _vm._v(" "),
-                _vm._m(1),
+                _vm._m(2),
               ]),
               _vm._v(" "),
               _c(
@@ -74157,7 +74232,7 @@ var render = function () {
                     { staticClass: "modal-body", attrs: { id: "addNew" } },
                     [
                       _c("div", { staticClass: "container-fluid" }, [
-                        _vm._m(2),
+                        _vm._m(3),
                         _vm._v(" "),
                         _c("div", { staticClass: "row" }, [
                           _c("div", { staticClass: "col" }, [
@@ -74387,6 +74462,18 @@ var render = function () {
                                     },
                                   },
                                   [
+                                    _c(
+                                      "option",
+                                      {
+                                        attrs: {
+                                          disabled: "",
+                                          selected: "",
+                                          value: "",
+                                        },
+                                      },
+                                      [_vm._v(" -- Sexe -- ")]
+                                    ),
+                                    _vm._v(" "),
                                     _c(
                                       "option",
                                       { attrs: { value: "Homme" } },
@@ -74632,17 +74719,31 @@ var render = function () {
                                     },
                                   },
                                 },
-                                _vm._l(this.divisions, function (div) {
-                                  return _c(
+                                [
+                                  _c(
                                     "option",
                                     {
-                                      key: div.id,
-                                      domProps: { value: div.id },
+                                      attrs: {
+                                        disabled: "",
+                                        selected: "",
+                                        value: "",
+                                      },
                                     },
-                                    [_vm._v(_vm._s(div.Division))]
-                                  )
-                                }),
-                                0
+                                    [_vm._v(" -- Division -- ")]
+                                  ),
+                                  _vm._v(" "),
+                                  _vm._l(this.divisions, function (div) {
+                                    return _c(
+                                      "option",
+                                      {
+                                        key: div.id,
+                                        domProps: { value: div.id },
+                                      },
+                                      [_vm._v(_vm._s(div.Division))]
+                                    )
+                                  }),
+                                ],
+                                2
                               ),
                             ]),
                             _vm._v(" "),
@@ -74880,6 +74981,18 @@ var render = function () {
                                   [
                                     _c(
                                       "option",
+                                      {
+                                        attrs: {
+                                          disabled: "",
+                                          selected: "",
+                                          value: "",
+                                        },
+                                      },
+                                      [_vm._v(" -- Type -- ")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
                                       { attrs: { value: "Utilisateur" } },
                                       [_vm._v("Utilisateur standard")]
                                     ),
@@ -74995,7 +75108,7 @@ var render = function () {
                   [_vm._v("Visualisation")]
                 ),
                 _vm._v(" "),
-                _vm._m(3),
+                _vm._m(4),
               ]),
               _vm._v(" "),
               _c(
@@ -75003,7 +75116,7 @@ var render = function () {
                 { staticClass: "modal-body", attrs: { id: "addNew" } },
                 [
                   _c("div", { staticClass: "container-fluid" }, [
-                    _vm._m(4),
+                    _vm._m(5),
                     _vm._v(" "),
                     _c("div", { staticClass: "row" }, [
                       _c("div", { staticClass: "col" }, [
@@ -75025,6 +75138,7 @@ var render = function () {
                                 "is-invalid": _vm.form.errors.has("nom"),
                               },
                               attrs: {
+                                disabled: "{!isEditMode}/",
                                 type: "text",
                                 name: "nom",
                                 placeholder: "nom",
@@ -75065,6 +75179,7 @@ var render = function () {
                                 "is-invalid": _vm.form.errors.has("prenom"),
                               },
                               attrs: {
+                                disabled: "{!isEditMode}/",
                                 name: "prenom",
                                 id: "prenom",
                                 placeholder: "prénom",
@@ -75109,6 +75224,7 @@ var render = function () {
                                 "is-invalid": _vm.form.errors.has("CNE"),
                               },
                               attrs: {
+                                disabled: "{!isEditMode}/",
                                 type: "",
                                 name: "CNE",
                                 id: "CNE",
@@ -75150,6 +75266,7 @@ var render = function () {
                                 "is-invalid": _vm.form.errors.has("Telephone"),
                               },
                               attrs: {
+                                disabled: "{!isEditMode}/",
                                 name: "Telephone",
                                 id: "Telephone",
                                 placeholder: "Telephone",
@@ -75180,56 +75297,34 @@ var render = function () {
                           "div",
                           { staticClass: "form-group" },
                           [
-                            _c(
-                              "select",
-                              {
-                                directives: [
-                                  {
-                                    name: "model",
-                                    rawName: "v-model",
-                                    value: _vm.form.Sex,
-                                    expression: "form.Sex",
-                                  },
-                                ],
-                                staticClass: "form-control",
-                                class: {
-                                  "is-invalid": _vm.form.errors.has("Sex"),
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.form.Sex,
+                                  expression: "form.Sex",
                                 },
-                                attrs: { name: "Sex", id: "Sex" },
-                                on: {
-                                  change: function ($event) {
-                                    var $$selectedVal = Array.prototype.filter
-                                      .call(
-                                        $event.target.options,
-                                        function (o) {
-                                          return o.selected
-                                        }
-                                      )
-                                      .map(function (o) {
-                                        var val =
-                                          "_value" in o ? o._value : o.value
-                                        return val
-                                      })
-                                    _vm.$set(
-                                      _vm.form,
-                                      "Sex",
-                                      $event.target.multiple
-                                        ? $$selectedVal
-                                        : $$selectedVal[0]
-                                    )
-                                  },
+                              ],
+                              staticClass: "form-control",
+                              class: {
+                                "is-invalid": _vm.form.errors.has("Sex"),
+                              },
+                              attrs: {
+                                disabled: "{!isEditMode}/",
+                                name: "Sex",
+                                id: "Sex",
+                              },
+                              domProps: { value: _vm.form.Sex },
+                              on: {
+                                input: function ($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(_vm.form, "Sex", $event.target.value)
                                 },
                               },
-                              [
-                                _c("option", { attrs: { value: "Homme" } }, [
-                                  _vm._v("Homme"),
-                                ]),
-                                _vm._v(" "),
-                                _c("option", { attrs: { value: "Femme" } }, [
-                                  _vm._v("Femme"),
-                                ]),
-                              ]
-                            ),
+                            }),
                             _vm._v(" "),
                             _c("has-error", {
                               attrs: { form: _vm.form, field: "Sex" },
@@ -75257,6 +75352,7 @@ var render = function () {
                                   _vm.form.errors.has("Date_naissance"),
                               },
                               attrs: {
+                                disabled: "{!isEditMode}/",
                                 type: "Date",
                                 name: "Date_naissance",
                                 id: "Date_naissance",
@@ -75304,6 +75400,7 @@ var render = function () {
                                 "is-invalid": _vm.form.errors.has("Adresse"),
                               },
                               attrs: {
+                                disabled: "{!isEditMode}/",
                                 name: "Adresse",
                                 id: "Adresse",
                                 placeholder: "Adresse",
@@ -75350,6 +75447,7 @@ var render = function () {
                                 "is-invalid": _vm.form.errors.has("Matricule"),
                               },
                               attrs: {
+                                disabled: "{!isEditMode}/",
                                 name: "Matricule",
                                 id: "Matricule",
                                 placeholder: "Matricule",
@@ -75376,10 +75474,11 @@ var render = function () {
                           1
                         ),
                         _vm._v(" "),
-                        _c("div", { staticClass: "form-group" }, [
-                          _c(
-                            "select",
-                            {
+                        _c(
+                          "div",
+                          { staticClass: "form-group" },
+                          [
+                            _c("input", {
                               directives: [
                                 {
                                   name: "model",
@@ -75389,38 +75488,35 @@ var render = function () {
                                 },
                               ],
                               staticClass: "form-control",
-                              staticStyle: { width: "150px" },
+                              class: {
+                                "is-invalid": _vm.form.errors.has("division"),
+                              },
+                              attrs: {
+                                disabled: "{!isEditMode}/",
+                                name: "division",
+                                id: "division",
+                              },
+                              domProps: { value: _vm.form.Division },
                               on: {
-                                change: function ($event) {
-                                  var $$selectedVal = Array.prototype.filter
-                                    .call($event.target.options, function (o) {
-                                      return o.selected
-                                    })
-                                    .map(function (o) {
-                                      var val =
-                                        "_value" in o ? o._value : o.value
-                                      return val
-                                    })
+                                input: function ($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
                                   _vm.$set(
                                     _vm.form,
                                     "Division",
-                                    $event.target.multiple
-                                      ? $$selectedVal
-                                      : $$selectedVal[0]
+                                    $event.target.value
                                   )
                                 },
                               },
-                            },
-                            _vm._l(this.divisions, function (div) {
-                              return _c(
-                                "option",
-                                { key: div.id, domProps: { value: div.id } },
-                                [_vm._v(_vm._s(div.Division))]
-                              )
                             }),
-                            0
-                          ),
-                        ]),
+                            _vm._v(" "),
+                            _c("has-error", {
+                              attrs: { form: _vm.form, field: "division" },
+                            }),
+                          ],
+                          1
+                        ),
                         _vm._v(" "),
                         _c(
                           "div",
@@ -75440,6 +75536,7 @@ var render = function () {
                                 "is-invalid": _vm.form.errors.has("email"),
                               },
                               attrs: {
+                                disabled: "{!isEditMode}/",
                                 type: "email",
                                 name: "email",
                                 placeholder: "Email Address",
@@ -75485,6 +75582,7 @@ var render = function () {
                                   _vm.form.errors.has("Date_recrutement"),
                               },
                               attrs: {
+                                disabled: "{!isEditMode}/",
                                 type: "Date",
                                 placeholder: "Date_recrutement",
                                 name: "Date_recrutement",
@@ -75533,6 +75631,7 @@ var render = function () {
                                 "is-invalid": _vm.form.errors.has("Intitule"),
                               },
                               attrs: {
+                                disabled: "{!isEditMode}/",
                                 name: "Intitule",
                                 id: "Intitule",
                                 placeholder: "Intitule",
@@ -75577,6 +75676,7 @@ var render = function () {
                                 "is-invalid": _vm.form.errors.has("bio"),
                               },
                               attrs: {
+                                disabled: "{!isEditMode}/",
                                 name: "bio",
                                 id: "bio",
                                 placeholder: "Commentaire",
@@ -75603,60 +75703,38 @@ var render = function () {
                           "div",
                           { staticClass: "form-group" },
                           [
-                            _c(
-                              "select",
-                              {
-                                directives: [
-                                  {
-                                    name: "model",
-                                    rawName: "v-model",
-                                    value: _vm.form.type,
-                                    expression: "form.type",
-                                  },
-                                ],
-                                staticClass: "form-control",
-                                class: {
-                                  "is-invalid": _vm.form.errors.has("type"),
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.form.type,
+                                  expression: "form.type",
                                 },
-                                attrs: { name: "type", id: "type" },
-                                on: {
-                                  change: function ($event) {
-                                    var $$selectedVal = Array.prototype.filter
-                                      .call(
-                                        $event.target.options,
-                                        function (o) {
-                                          return o.selected
-                                        }
-                                      )
-                                      .map(function (o) {
-                                        var val =
-                                          "_value" in o ? o._value : o.value
-                                        return val
-                                      })
-                                    _vm.$set(
-                                      _vm.form,
-                                      "type",
-                                      $event.target.multiple
-                                        ? $$selectedVal
-                                        : $$selectedVal[0]
-                                    )
-                                  },
+                              ],
+                              staticClass: "form-control",
+                              class: {
+                                "is-invalid": _vm.form.errors.has("type"),
+                              },
+                              attrs: {
+                                disabled: "{!isEditMode}/",
+                                name: "type",
+                                id: "type",
+                              },
+                              domProps: { value: _vm.form.type },
+                              on: {
+                                input: function ($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    _vm.form,
+                                    "type",
+                                    $event.target.value
+                                  )
                                 },
                               },
-                              [
-                                _c(
-                                  "option",
-                                  { attrs: { value: "Utilisateur" } },
-                                  [_vm._v("Utilisateur standard")]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "option",
-                                  { attrs: { value: "Chef de division" } },
-                                  [_vm._v("Chef de division")]
-                                ),
-                              ]
-                            ),
+                            }),
                             _vm._v(" "),
                             _c("has-error", {
                               attrs: { form: _vm.form, field: "type" },
@@ -75670,7 +75748,7 @@ var render = function () {
                 ]
               ),
               _vm._v(" "),
-              _vm._m(5),
+              _vm._m(6),
             ]),
           ]
         ),
@@ -75679,6 +75757,16 @@ var render = function () {
   ])
 }
 var staticRenderFns = [
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "a",
+      { staticClass: "btn btn-success white", attrs: { href: "#" } },
+      [_vm._v("Export "), _c("i", { staticClass: "fa-solid fa-file-export" })]
+    )
+  },
   function () {
     var _vm = this
     var _h = _vm.$createElement

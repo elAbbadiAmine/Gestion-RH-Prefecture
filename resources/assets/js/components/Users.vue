@@ -4,14 +4,31 @@
           <div class="col-md-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Liste des utilisateurs</h3>
+                <h2 class="card-title">Liste des utilisateurs</h2>
 
                 <div class="card-tools">
                     <button class="btn btn-success" @click="newModal">Ajouter <i class="fas fa-user-plus fa-fw"></i></button>
-                    <a class="btn btn-success white" @click="exportExcel">Export <i class="fa-solid fa-file-export"></i></a>
+                    <a class="btn btn-success white" href="#">Export <i class="fa-solid fa-file-export"></i></a>
             
                 </div>
               </div>
+              <template>
+    <div class="container">
+         
+        <div class="card-header">
+            <select  id="" v-model="sort" @change="sortValue">
+                <option value="1" >Active</option>
+                <option value="0" >In-Active</option>
+            </select>
+        </div>
+        <div class="card-body">
+            <ul v-for="post in post" :key='post.id'>
+                <li>{{ post.title }} {{ post.active }} </li>
+            </ul>
+        </div>
+    </div>
+</template>
+
               <!-- /.card-header -->
               <div class="card-body table-responsive p-0">
                 <table class="table table-hover">
@@ -34,7 +51,7 @@
                     <td>{{user.Division}}</td>
                     <td>{{user.email}}</td>
                     <td>{{user.type}}</td>
-                    <td>{{user.created_at | myDate}}</td>
+                    <td>{{user.updated_at | myDate}}</td>
 
                     <td>
                         <a href="#" @click="viewUser(user)">
@@ -108,9 +125,10 @@
                               <has-error :form="form" field="Telephone"></has-error>
                           </div>
                           <div class="form-group">
-                              <select name="Sex" v-model="form.Sex" id="Sex" class="form-control" :class="{ 'is-invalid': form.errors.has('Sex') }">
-                                  <option value="Homme">Homme</option>
-                                  <option value="Femme">Femme</option>
+                              <select name="Sex" v-model="form.Sex" id="Sex"  class="form-control" :class="{ 'is-invalid': form.errors.has('Sex') }">
+                                 <option disabled selected value> -- Sexe -- </option>
+                                 <option value="Homme">Homme</option>
+                                 <option value="Femme">Femme</option>
                               </select>
                               <has-error :form="form" field="Sex"></has-error>
                           </div>
@@ -139,7 +157,8 @@
                           </div>
                           <div class="form-group">
                               <select class='form-control' style="width: 150px;" v-model="form.Division">
-                                  <option v-for="div in this.divisions" :key="div.id" :value="div.id">{{ div.Division }}</option>
+                                <option disabled selected value> -- Division -- </option>
+                                <option v-for="div in this.divisions" :key="div.id" :value="div.id">{{ div.Division }}</option>
                               </select>
                           </div>
                           <div class="form-group">
@@ -166,7 +185,7 @@
                           </div>
                           <div class="form-group">
                                   <select name="type" v-model="form.type" id="type" class="form-control" :class="{ 'is-invalid': form.errors.has('type') }">
-                                    <!-- <option value="admin">Administrateur</option> -->
+                                      <option disabled selected value> -- Type -- </option>
                                       <option value="Utilisateur">Utilisateur standard</option>
                                       <option value="Chef de division">Chef de division</option>
                                   </select>
@@ -210,87 +229,83 @@
                     <div class="row">
                         <div class="col"><!-- Perso-->
                           <div class="form-group">
-                              <input v-model="form.nom" type="text" name="nom" placeholder="nom"
+                              <input disabled={!isEditMode}/ v-model="form.nom" type="text" name="nom" placeholder="nom"
                                   class="form-control" :class="{ 'is-invalid': form.errors.has('nom') }">
                               <has-error :form="form" field="nom"></has-error>
                           </div>
                           <div class="form-group">
-                              <input v-model="form.prenom" name="prenom" id="prenom"
+                              <input disabled={!isEditMode}/ v-model="form.prenom" name="prenom" id="prenom"
                               placeholder="prénom"
                               class="form-control" :class="{ 'is-invalid': form.errors.has('prenom') }">
                               <has-error :form="form" field="prenom"></has-error>
                           </div>
                           <div class="form-group">
-                              <input type="" v-model="form.CNE" name="CNE" id="CNE"
+                              <input disabled={!isEditMode}/ type="" v-model="form.CNE" name="CNE" id="CNE"
                               placeholder="CNE"
                               class="form-control" :class="{ 'is-invalid': form.errors.has('CNE') }">
                               <has-error :form="form" field="CNE"></has-error>
                           </div>
                           <div class="form-group">
-                              <input v-model="form.Telephone" name="Telephone" id="Telephone"
+                              <input disabled={!isEditMode}/ v-model="form.Telephone" name="Telephone" id="Telephone"
                               placeholder="Telephone"
                               class="form-control" :class="{ 'is-invalid': form.errors.has('Telephone') }">
                               <has-error :form="form" field="Telephone"></has-error>
                           </div>
                           <div class="form-group">
-                              <select name="Sex" v-model="form.Sex" id="Sex" class="form-control" :class="{ 'is-invalid': form.errors.has('Sex') }">
-                                  <option value="Homme">Homme</option>
-                                  <option value="Femme">Femme</option>
-                              </select>
-                              <has-error :form="form" field="Sex"></has-error>
+                            <input disabled={!isEditMode}/ v-model="form.Sex" name="Sex" id="Sex"
+                             
+                              class="form-control" :class="{ 'is-invalid': form.errors.has('Sex') }">
+                              <has-error :form="form" field="Sex"></has-error>                              
                           </div>
                           <div class="form-group">
-                              <input type="Date" name="Date_naissance" v-model="form.Date_naissance" id="Date_naissance" class="form-control" :class="{ 'is-invalid': form.errors.has('Date_naissance') }">
+                              <input disabled={!isEditMode}/ type="Date" name="Date_naissance" v-model="form.Date_naissance" id="Date_naissance" class="form-control" :class="{ 'is-invalid': form.errors.has('Date_naissance') }">
                               <has-error :form="form" field="Date_naissance"></has-error>
                           </div>
                           <div class="form-group">
-                              <textarea v-model="form.Adresse" name="Adresse" id="Adresse"
+                              <textarea disabled={!isEditMode}/ v-model="form.Adresse" name="Adresse" id="Adresse"
                               placeholder="Adresse"
                               class="form-control" :class="{ 'is-invalid': form.errors.has('Adresse') }"></textarea>
                               <has-error :form="form" field="Adresse"></has-error>
                           </div>
 
                         </div>
-                    <div class="col"><!-- Pro-->
+                    <div class="col"><!-- Pro -->
                           <div class="form-group">
-                                  <input v-model="form.Matricule" name="Matricule" id="Matricule"
+                                  <input disabled={!isEditMode}/ v-model="form.Matricule" name="Matricule" id="Matricule"
                                   placeholder="Matricule"
                                   class="form-control" :class="{ 'is-invalid': form.errors.has('Matricule') }">
                                   <has-error :form="form" field="Matricule"></has-error>
                           </div>
                           <div class="form-group">
-                              <select class='form-control' style="width: 150px;" v-model="form.Division">
-                                  <option v-for="div in this.divisions" :key="div.id" :value="div.id">{{ div.Division }}</option>
-                              </select>
+                             <input disabled={!isEditMode}/ v-model="form.Division" name="division" id="division" 
+                                  class="form-control" :class="{ 'is-invalid': form.errors.has('division') }">
+                                  <has-error :form="form" field="division"></has-error>
                           </div>
                           <div class="form-group">
-                                  <input v-model="form.email" type="email" name="email"
+                                  <input disabled={!isEditMode}/ v-model="form.email" type="email" name="email"
                                       placeholder="Email Address"
                                       class="form-control" :class="{ 'is-invalid': form.errors.has('email') }">
                                   <has-error :form="form" field="email"></has-error>
                           </div>
                           <div class="form-group">
-                              <input type="Date" placeholder="Date_recrutement" name="Date_recrutement" v-model="form.Date_recrutement" id="Date_recrutement" class="form-control" :class="{ 'is-invalid': form.errors.has('Date_recrutement') }">
+                              <input disabled={!isEditMode}/ type="Date" placeholder="Date_recrutement" name="Date_recrutement" v-model="form.Date_recrutement" id="Date_recrutement" class="form-control" :class="{ 'is-invalid': form.errors.has('Date_recrutement') }">
                               <has-error :form="form" field="Date_recrutement"></has-error>
                           </div>
                           <div class="form-group">
-                              <input v-model="form.Intitule" name="Intitule" id="Intitule"
+                              <input disabled={!isEditMode}/ v-model="form.Intitule" name="Intitule" id="Intitule"
                               placeholder="Intitule"
                               class="form-control" :class="{ 'is-invalid': form.errors.has('Intitule') }">
                               <has-error :form="form" field="Intitule"></has-error>
                           </div>
                           <div class="form-group">
-                                  <textarea v-model="form.bio" name="bio" id="bio"
+                                  <textarea disabled={!isEditMode}/ v-model="form.bio" name="bio" id="bio"
                                   placeholder="Commentaire"
                                   class="form-control" :class="{ 'is-invalid': form.errors.has('bio') }"></textarea>
                                   <has-error :form="form" field="bio"></has-error>
                           </div>
                           <div class="form-group">
-                                  <select name="type" v-model="form.type" id="type" class="form-control" :class="{ 'is-invalid': form.errors.has('type') }">
-                                    <!-- <option value="admin">Administrateur</option> -->
-                                      <option value="Utilisateur">Utilisateur standard</option>
-                                      <option value="Chef de division">Chef de division</option>
-                                  </select>
+                            <input disabled={!isEditMode}/ v-model="form.type" name="type" id="type" 
+                                  class="form-control" :class="{ 'is-invalid': form.errors.has('type') }">
                                   <has-error :form="form" field="type"></has-error>
                           </div>
 
@@ -313,6 +328,7 @@
 import swal from 'sweetalert2';
 
     export default {
+        
         data() {
             return {
                 editmode: false,
@@ -392,7 +408,7 @@ import swal from 'sweetalert2';
                                 this.form.delete('api/user/'+id).then(()=>{
                                         swal.fire(
                                             'Supprimé!',
-                                            'Your file has been deleted.',
+                                            'Votre utilisateur a été bien supprimer ',
                                             'Succès'
                                         )
                                     Fire.$emit('AfterCreate');
@@ -407,12 +423,6 @@ import swal from 'sweetalert2';
             },
             loadDivs(){
                 axios.get("api/loadDivs").then(({ data }) => (this.divisions = data.data))
-            },
-            exportExcel(){
-                axios.get('api/export')
-                    .then((res)=>{
-                        console.log('hahahhaahahhahaahaha')
-                    })
             },
             createUser(){
                 this.$Progress.start();

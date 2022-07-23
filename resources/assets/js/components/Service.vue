@@ -135,13 +135,13 @@ export default {
             },
             deleteService(id){
                 swal.fire({     
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
-                    type: 'warning',
+                    title: 'Êtes-vous sûr?',
+                    text: "Vous ne pourrez pas revenir en arrière!",
+                    type: 'Attention',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, delete it!'
+                    confirmButtonText: 'OUI, supprimer le!'
                     }).then((result) => {
 
 
@@ -149,13 +149,13 @@ export default {
                         if (result.value) {
                                 this.form.delete('api/service/'+id).then(()=>{
                                         swal.fire(
-                                            'Deleted!',
-                                            'Your file has been deleted.',
-                                            'success'
+                                            'Supprimer!',
+                                            'Votre fichier a été bien supprimer.',
+                                            'succès'
                                         )
                                     Fire.$emit('AfterCreate');
                                 }).catch(()=> {
-                                    swal("Failed!", "There was something wronge.", "warning");
+                                    swal("Erreur!", "Il y avait quelque chose qui n'allait pas.", "Alert");
                                 });
                          }
                     })
@@ -165,15 +165,15 @@ export default {
                 this.form.post('api/service')
                 .then(()=>{
                     swal.fire(
-                        'Success',
-                        'service created',
-                        'success'
+                        'Succès',
+                        'service a été bien creer',
+                        'succès'
                         )
                     Fire.$emit('AfterCreate');
                     $('#addNew').modal('hide')
                     toast({
                         type: 'success',
-                        title: 'service Created in successfully'
+                        title: 'service a été bien creer'
                         })
                 this.$Progress.finish();
 
@@ -195,9 +195,9 @@ export default {
               // success
                     $('#addNew').modal('hide');
                     swal.fire(
-                        'Updated!',
-                        'Information has been updated.',
-                        'success'
+                        'Mise à jour!',
+                        'le service a été bien modifier',
+                        'succès'
                     )
                     this.$Progress.finish();
                     Fire.$emit('AfterCreate');

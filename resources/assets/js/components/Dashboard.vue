@@ -1,6 +1,6 @@
 <template>
     <h1>
-        BIENVENUE
+        Bonjour
     </h1>
 </template>
 
