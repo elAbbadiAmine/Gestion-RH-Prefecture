@@ -231,7 +231,60 @@ class UserController extends Controller
         return ['data' => $result];
     }
 
-    public function export(){
-        return Excel::download(new UserExport, 'users.xlsx');
+    public function getUsersName(Request $request){
+        $users = User::findOrFail($request['Division']);
+        return ['data' => $users];
     }
+
+
+    public function getUsersByDiv($id){
+        $users = User::latest()->paginate(20);
+        $results=[];
+
+        if($id == '0'){
+            foreach($users as $user){
+                $idDiv = $user -> Division;
+                if($idDiv == '-'){
+                    $user -> Division ='-';
+                    $results[]= $user;
+                }
+            }
+        }else{
+            foreach($users as $user){
+                $idDiv = $user -> Division;
+                if($idDiv == $id){
+                    $division = Division::findOrFail($idDiv);
+                    $user -> Division =$division-> Division;
+                    $results[]= $user;
+                }
+            }
+        }
+        return $results;    
+    }
+
+    public function getUsersByType($type)
+    {
+        $users = User::latest()->paginate(20);
+        $results=[];
+        
+        foreach($users as $user){
+            $userType = $user -> type;
+            if($userType == $type){
+                if($user -> Division){
+                    $division = Division::findOrFail($user -> Division);
+                    $user -> Division =$division-> Division;
+                }else{
+                    $user -> Division ='-';
+                }
+                $results[] = $user;
+            }
+        }
+        
+        return $results;
+    }
+
+
+    //public function export(){
+      //  return Excel::download(new UserExport, 'users.xlsx');
+    //}
 }

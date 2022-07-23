@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*php
 |--------------------------------------------------------------------------
@@ -35,6 +36,22 @@ Route::get('division/{id}','API\DivisionController@show');
 Route::delete('service/{id}','API\ServController@destroy');
 Route::put('service/{id}', 'API\ServController@update');
 Route::get('ServDivision','API\ServController@ServDivision');
+
+
+
+
+
+Route::get('getByType/{type}','API\UserController@getUsersByType');
+
+Route::get('getByDivision/{id}','API\UserController@getUsersByDiv');
+
+
+
+
+
+
+
+
 
 // les demandes
 Route::post('demande_conge','API\DemandeCongeController@store');

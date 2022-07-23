@@ -29,6 +29,7 @@
         "admin-lte": "^3.0.0-alpha.2",
         "autoprefixer": "10.4.5",
         "laravel-vue-pagination": "^3.0.0",
+        "moment": "^2.29.4",
         "sweetalert2": "^11.4.16",
         "vform": "^2.1.2",
         "vue-moment": "^4.1.0",

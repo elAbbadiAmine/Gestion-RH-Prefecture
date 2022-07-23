@@ -134,7 +134,6 @@ class DivisionController extends Controller
     public function UserDivisions(request $request){
        $userdev = User::all();
        $result = [];
-      // $userdev = Division::all();
        foreach($userdev as $user){
            if(sizeof(Division::where('Chef_division',$user->id)->get())==0)
             $result[] =  $user;
@@ -142,4 +141,6 @@ class DivisionController extends Controller
 
         return ['data' => $result]; // or return response()->json(['data' => employees]);
     }
+
+    
 }

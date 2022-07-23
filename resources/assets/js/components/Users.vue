@@ -9,25 +9,43 @@
                 <div class="card-tools">
                     <button class="btn btn-success" @click="newModal">Ajouter <i class="fas fa-user-plus fa-fw"></i></button>
                     <a class="btn btn-success white" href="#">Export <i class="fa-solid fa-file-export"></i></a>
-            
                 </div>
               </div>
-              <template>
-    <div class="container">
-         
-        <div class="card-header">
-            <select  id="" v-model="sort" @change="sortValue">
-                <option value="1" >Active</option>
-                <option value="0" >In-Active</option>
+
+    <div class="navbar navbar-expand-lg bg-light">
+        <div class="container-fluid">
+
+            <form class="d-flex " role="search">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success" style="margin-left: 7px;" @click="getUsersByName()">Rechercher</button>
+            </form>
+
+            <select  id="selectDiv" class='form-control ' v-model="form.Division" style="width: 140px;" @change="getUsersByDivs(); ">
+                <option disabled selected value> -- Division -- </option>
+                <option value="0"> - </option>
+                <option v-for="div in this.divisions" :key="div.id" :value="div.id">{{ div.Division }}</option>
             </select>
-        </div>
-        <div class="card-body">
-            <ul v-for="post in post" :key='post.id'>
-                <li>{{ post.title }} {{ post.active }} </li>
-            </ul>
+
+            <select name="type" v-model="form.type" style="width: 180px;"  id="selectType" class="form-control"  @change="getUsersByType();">
+                <option disabled selected value> -- Type -- </option>
+                <option value="admin">Admin</option>
+                <option value="Utilisateur">Utilisateur standard</option>
+                <option value="Chef de division">Chef de division</option>
+            </select>
+            <div class="form-group">
+                <input type="Date" name="Date_naissance" style="width: 40px; margin-top: 15px;" v-model="form.Date_naissance" id="Date_naissance" class="form-control" :class="{ 'is-invalid': form.errors.has('Date_naissance') }">
+                <has-error :form="form" field="Date_naissance"></has-error>
+            </div>
+            <div class="form-group">
+                <input type="Date" name="Date_naissance" style="width: 40px; margin-top: 15px;" v-model="form.Date_naissance" id="Date_naissance" class="form-control" :class="{ 'is-invalid': form.errors.has('Date_naissance') }">
+                <has-error :form="form" field="Date_naissance"></has-error>
+            </div>
+            <input class="btn btn-primary" type="reset" value="réinitialiser" @click="reset()">
+
         </div>
     </div>
-</template>
+
+
 
               <!-- /.card-header -->
               <div class="card-body table-responsive p-0">
@@ -39,7 +57,7 @@
                         <th>Division</th>
                         <th>Email</th>
                         <th>Type</th>
-                        <th>Enregistré à</th>
+                        <th>Modifier à</th>
                         <th>Modifier</th>
                   </tr>
 
@@ -51,7 +69,7 @@
                     <td>{{user.Division}}</td>
                     <td>{{user.email}}</td>
                     <td>{{user.type}}</td>
-                    <td>{{user.updated_at | myDate}}</td>
+                    <td>{{ user.created_at | myDate }}</td>
 
                     <td>
                         <a href="#" @click="viewUser(user)">
@@ -323,6 +341,7 @@
       
 
     </div>
+    
 </template>
 <script>
 import swal from 'sweetalert2';
@@ -424,6 +443,22 @@ import swal from 'sweetalert2';
             loadDivs(){
                 axios.get("api/loadDivs").then(({ data }) => (this.divisions = data.data))
             },
+            getUsersByType(){
+                var type = document.getElementById("selectType").value;
+                axios.get("api/getByType/"+type).then(({ data }) => (this.users = data))
+            },
+            getUsersByDivs(){
+                var idDev = document.getElementById("selectDiv").value;
+                axios.get("api/getByDivision/"+idDev).then(({ data }) => (this.users = data))
+            },getUsersByName(){
+                var name = document.getElementById("searchBar").text;
+                console.log("mmmmmmmmmmmmmmmmmmmmmmmmmmmmm");
+            },
+            reset(){
+                $('#selectDiv').val('');
+                $('#selectType').prop('selectedIndex',0);
+                Fire.$emit('AfterCreate');
+            },
             createUser(){
                 this.$Progress.start();
                
@@ -458,4 +493,5 @@ import swal from 'sweetalert2';
         }
 
     }
+    
 </script>
