@@ -29,6 +29,10 @@
                             <i class="fa fa-eye green"></i>
                         </a>
                         /
+                        <a href="#" @click="valideDemande()">
+                            <i class="fa-solid fa-arrows-rotate"></i>
+                        </a> 
+                        /
                         <a href="#" @click="deleteUser(user.id)">
                             <i class="fas fa-check"></i>
                         </a> 
@@ -59,6 +63,17 @@ export default {
             
         },
         methods: {
+            valideDemande(){
+                swal.fire({
+                    title: 'Voulez-vous vraiment de traité la demande ?',
+                    text: "vous ne pourrez pas revenir en arrière !",
+                    type: 'Attention',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Oui, validez-le !',
+                    })
+            },
             loadDemandeRhAll(){
                 axios.get("api/loadDemandeRhAll/").then(({ data }) => (this.demanderh=data.data))
             },

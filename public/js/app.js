@@ -2892,6 +2892,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -2906,6 +2910,17 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    valideDemande: function valideDemande() {
+      swal.fire({
+        title: 'Voulez-vous vraiment de traité la demande ?',
+        text: "vous ne pourrez pas revenir en arrière !",
+        type: 'Attention',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Oui, validez-le !'
+      });
+    },
     loadDemandeRhAll: function loadDemandeRhAll() {
       var _this = this;
 
@@ -71721,6 +71736,25 @@ var render = function () {
                           [_c("i", { staticClass: "fa fa-eye green" })]
                         ),
                         _vm._v("\n                    /\n                    "),
+                        _c(
+                          "a",
+                          {
+                            attrs: { href: "#" },
+                            on: {
+                              click: function ($event) {
+                                return _vm.valideDemande()
+                              },
+                            },
+                          },
+                          [
+                            _c("i", {
+                              staticClass: "fa-solid fa-arrows-rotate",
+                            }),
+                          ]
+                        ),
+                        _vm._v(
+                          " \n                    /\n                    "
+                        ),
                         _c(
                           "a",
                           {
