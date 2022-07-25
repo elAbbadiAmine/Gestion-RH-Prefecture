@@ -4,43 +4,54 @@
           <div class="col-md-12">
             <div class="card">
               <div class="card-header">
-                <h2 class="card-title">Liste des utilisateurs</h2>
 
+                <h2 class="card-title" style="margin-top: 10px;margin-left: 10px; width: 200px;">Liste des utilisateurs</h2>
+                
+                <form class="card-tools" role="search" >
+                    <input v-model="keyword" class="form-control me-2"  style="width: 280px; margin-right: 210px;margin-top: 8px;" type="search" placeholder="Rechercher par Nom" aria-label="Search" id="shearchField">
+                </form>
+                
                 <div class="card-tools">
-                    <button class="btn btn-success" @click="newModal">Ajouter <i class="fas fa-user-plus fa-fw"></i></button>
-                    <a class="btn btn-success white" href="#">Export <i class="fa-solid fa-file-export"></i></a>
+                    <button class="btn btn-success" @click="newModal" style="margin-top: 8px;">Ajouter <i class="fas fa-user-plus fa-fw"></i></button>
+                    <a class="btn btn-success" @click="exportExcel" style="margin-top: 8px;">Export <i class="fas fa-file-export fa-fw"></i></a>
                 </div>
+                
               </div>
 
     <div class="navbar navbar-expand-lg bg-light">
         <div class="container-fluid">
 
-            <form class="d-flex " role="search">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success" style="margin-left: 7px;" @click="getUsersByName()">Rechercher</button>
-            </form>
-
-            <select  id="selectDiv" class='form-control ' v-model="form.Division" style="width: 140px;" @change="getUsersByDivs(); ">
+            <select  id="selectDiv" class='form-control '  style="width: 140px;" @change="getUsersByDivs(); ">
                 <option disabled selected value> -- Division -- </option>
                 <option value="0"> - </option>
                 <option v-for="div in this.divisions" :key="div.id" :value="div.id">{{ div.Division }}</option>
             </select>
 
-            <select name="type" v-model="form.type" style="width: 180px;"  id="selectType" class="form-control"  @change="getUsersByType();">
+            <span>|</span>
+
+            <select name="type" style="width: 180px;"  id="selectType" class="form-control"  @change="getUsersByType();">
                 <option disabled selected value> -- Type -- </option>
                 <option value="admin">Admin</option>
                 <option value="Utilisateur">Utilisateur standard</option>
                 <option value="Chef de division">Chef de division</option>
             </select>
+
+            <span>|</span>
+
             <div class="form-group">
-                <input type="Date" name="Date_naissance" style="width: 40px; margin-top: 15px;" v-model="form.Date_naissance" id="Date_naissance" class="form-control" :class="{ 'is-invalid': form.errors.has('Date_naissance') }">
-                <has-error :form="form" field="Date_naissance"></has-error>
+                <input type="Date" id="search_date_from" style="width: 160px; margin-top: 15px;" class="form-control" :class="{ 'is-invalid': form.errors.has('Date_naissance') }">
+                <has-error :form="form" ></has-error>
             </div>
             <div class="form-group">
-                <input type="Date" name="Date_naissance" style="width: 40px; margin-top: 15px;" v-model="form.Date_naissance" id="Date_naissance" class="form-control" :class="{ 'is-invalid': form.errors.has('Date_naissance') }">
-                <has-error :form="form" field="Date_naissance"></has-error>
+                <input type="Date" id="search_date_to" style="width: 160px; margin-top: 15px;"   class="form-control" :class="{ 'is-invalid': form.errors.has('Date_naissance') }">
+                <has-error :form="form" ></has-error>
             </div>
-            <input class="btn btn-primary" type="reset" value="réinitialiser" @click="reset()">
+            <button @click="getUsersByDate()" class="btn btn-navbar" >
+                <i class="fa fa-search"></i>
+            </button>
+            <span>|</span>
+            
+            <input class="btn btn-primary" style="width:100px;" type="reset" value="réinitialiser" @click="reset()">
 
         </div>
     </div>
@@ -69,7 +80,7 @@
                     <td>{{user.Division}}</td>
                     <td>{{user.email}}</td>
                     <td>{{user.type}}</td>
-                    <td>{{ user.created_at | myDate }}</td>
+                    <td>{{ moment(user.created_at).format("DD/MM/YYYY") }}</td>
 
                     <td>
                         <a href="#" @click="viewUser(user)">
@@ -345,11 +356,16 @@
 </template>
 <script>
 import swal from 'sweetalert2';
+import moment from "moment";
+import { saveExcel } from '@progress/kendo-vue-excel-export';
+import { Grid } from '@progress/kendo-vue-grid';
 
     export default {
         
         data() {
-            return {
+            return {  
+                moment: moment, 
+                keyword: null,
                 editmode: false,
                 users : {},
                 divisions : {},
@@ -374,13 +390,16 @@ import swal from 'sweetalert2';
                 })
             }
         },
+        watch: {
+            keyword(after, before) {
+                this.getUsersByName();
+            }
+        },
         methods: {
             updateUser(){
                 this.$Progress.start();
-                //console.log('Editing data');
                 this.form.put('api/user/'+this.form.id)
                 .then(() => {
-                    // success
                     $('#addNew').modal('hide');
                     swal.fire(
                         'mise à jour!',
@@ -421,8 +440,6 @@ import swal from 'sweetalert2';
                     cancelButtonColor: '#d33',
                     confirmButtonText: 'Oui, supprimez-le !'
                     }).then((result) => {
-
-                        // Send request to the server
                         if (result.value) {
                                 this.form.delete('api/user/'+id).then(()=>{
                                         swal.fire(
@@ -451,13 +468,47 @@ import swal from 'sweetalert2';
                 var idDev = document.getElementById("selectDiv").value;
                 axios.get("api/getByDivision/"+idDev).then(({ data }) => (this.users = data))
             },getUsersByName(){
-                var name = document.getElementById("searchBar").text;
-                console.log("mmmmmmmmmmmmmmmmmmmmmmmmmmmmm");
+                this.$Progress.start();
+                var nom = document.getElementById("shearchField").value;
+                axios.get("api/getByName/"+nom).then(({ data }) => (this.users = data))
+                this.$Progress.finish();
+            },getUsersByDate(){
+                var date_from = document.getElementById("search_date_from").value;
+                var date_to = document.getElementById("search_date_to").value;
+
+                this.$Progress.start();
+
+                axios.get('/api/getByDate/' + date_from + '/' + date_to).then(
+                    ({ data }) => (this.users = data),
+                    this.$Progress.finish()
+                ).catch(() => {
+                    this.$Progress.fail(),
+                    swal.fire({
+                    title: 'ooops !',
+                    text: 'Veuillez choisir une date.',
+                    confirmButtonColor:'#d33',
+                    confirmButtonText: 'Ok'
+                })});
             },
             reset(){
-                $('#selectDiv').val('');
+                $('#selectDiv').prop('selectedIndex',0);
                 $('#selectType').prop('selectedIndex',0);
+                $('#shearchField').val('');
                 Fire.$emit('AfterCreate');
+            },
+            exportExcel(){
+                saveExcel({
+                data: this.users,
+                fileName: "users",
+                columns: [
+                { field: 'id', title: 'ID' },
+                { field: 'nom', title: 'Nom' },
+                { field: 'Division', title: 'Division' },
+                { field: 'email', title: 'Email' },
+                { field: 'type', title: 'Type' }
+              ]
+            });
+
             },
             createUser(){
                 this.$Progress.start();
@@ -489,7 +540,6 @@ import swal from 'sweetalert2';
                this.loadUsers();
                this.loadDivs();
            });
-        //setInterval(() => this.loadUsers(), 3000);
         }
 
     }

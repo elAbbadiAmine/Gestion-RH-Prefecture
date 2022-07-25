@@ -283,8 +283,54 @@ class UserController extends Controller
         return $results;
     }
 
+    public function getUsersByName($nom){
+        $users = User::latest()->paginate(20);
+        $results=[];
+        $nom = strtolower($nom);
 
-    //public function export(){
-      //  return Excel::download(new UserExport, 'users.xlsx');
-    //}
+        foreach($users as $user){      
+            $nomUser = strtolower($user -> nom);
+
+            if(str_contains($nomUser,$nom) == true){
+                if($user -> Division){
+                    $division = Division::findOrFail($user -> Division);
+                    $user -> Division =$division-> Division;
+                }else{
+                    $user -> Division ='-';
+                }
+                $results[] = $user;
+            }
+        
+        }
+        
+        return $results;
+    }
+
+    
+    public function getUsersByDate($dateFrom,$dateTo){
+        
+        $users = User::latest()->paginate(20);
+        $results=[];
+        if($dateTo == null){$dateTo=$dateFrom;}
+        foreach($users as $user){      
+
+            if(($user -> created_at) >= $dateFrom && ($user -> created_at) <= $dateTo){
+                if($user -> Division){
+                    $division = Division::findOrFail($user -> Division);
+                    $user -> Division =$division-> Division;
+                }else{
+                    $user -> Division ='-';
+                }
+                $results[] = $user;
+            }
+        
+        }
+        
+        return $results;
+    }
+    
+    public function export() 
+    {
+        return Excel::download(new UserExport, 'users.xlsx');
+    }
 }

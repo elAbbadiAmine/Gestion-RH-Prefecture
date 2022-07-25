@@ -9,7 +9,7 @@
 require('./bootstrap');
 import Vue from 'vue';
 window.Vue = require('vue');
-import moment from 'moment';
+var moment = require('moment');
 import {
     Button,
     HasError,

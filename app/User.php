@@ -19,6 +19,9 @@ class User extends Authenticatable
         'nom','prenom','CNE','Division','Matricule','Sex','Date-naissance','Adresse','Telephone','Date_recrutement','Intitule', 'email', 'password', 'bio', 'photo','type'
     ];
 
+    protected $casts = [
+        'created_at' => 'datetime:m / d / Y',
+    ];
     /**
      * The attributes that should be hidden for arrays.
      *
