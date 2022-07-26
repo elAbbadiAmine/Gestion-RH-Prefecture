@@ -2896,6 +2896,51 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -2910,6 +2955,11 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    viewDemande: function viewDemande(demande) {
+      this.editmode = true;
+      $('#viewDemande').modal('show');
+      this.form.fill(demande);
+    },
     valideDemande: function valideDemande() {
       swal.fire({
         title: 'Voulez-vous vraiment de traité la demande ?',
@@ -71729,13 +71779,15 @@ var render = function () {
                             attrs: { href: "#" },
                             on: {
                               click: function ($event) {
-                                return _vm.viewUser(_vm.user)
+                                return _vm.viewDemande(rh)
                               },
                             },
                           },
                           [_c("i", { staticClass: "fa fa-eye green" })]
                         ),
-                        _vm._v("\n                    /\n                    "),
+                        _vm._v(
+                          "\n                        /\n                        "
+                        ),
                         _c(
                           "a",
                           {
@@ -71753,7 +71805,7 @@ var render = function () {
                           ]
                         ),
                         _vm._v(
-                          " \n                    /\n                    "
+                          " \n                        /\n                        "
                         ),
                         _c(
                           "a",
@@ -71778,6 +71830,200 @@ var render = function () {
         ]),
       ]),
     ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "viewDemande",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "addNewLabel",
+          "aria-hidden": "true",
+        },
+      },
+      [
+        _c(
+          "div",
+          {
+            staticClass: "modal-dialog modal-dialog-centered modal-lg",
+            attrs: { role: "document" },
+          },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _c("div", { staticClass: "modal-header" }, [
+                _c(
+                  "h2",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.editmode,
+                        expression: "editmode",
+                      },
+                    ],
+                    staticClass: "modal-title",
+                    attrs: { id: "addNewLabel" },
+                  },
+                  [_vm._v("Détails")]
+                ),
+                _vm._v(" "),
+                _vm._m(2),
+              ]),
+              _vm._v(" "),
+              _c(
+                "form",
+                {
+                  on: {
+                    submit: function ($event) {
+                      $event.preventDefault()
+                      return _vm.create_demande()
+                    },
+                  },
+                },
+                [
+                  _c("div", { staticClass: "card-body" }, [
+                    _c("div", [
+                      _c(
+                        "div",
+                        { staticClass: "form-group" },
+                        [
+                          _c("label", [_vm._v("Type de document : ")]),
+                          _vm._v(" "),
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.form.type,
+                                expression: "form.type",
+                              },
+                            ],
+                            staticClass: "form-control",
+                            class: {
+                              "is-invalid": _vm.form.errors.has("type"),
+                            },
+                            attrs: {
+                              disabled: "{!isEditMode}/",
+                              name: "type",
+                              id: "type",
+                            },
+                            domProps: { value: _vm.form.type },
+                            on: {
+                              input: function ($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(_vm.form, "type", $event.target.value)
+                              },
+                            },
+                          }),
+                          _vm._v(" "),
+                          _c("has-error", {
+                            attrs: { form: _vm.form, field: "type" },
+                          }),
+                        ],
+                        1
+                      ),
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "form-group" },
+                      [
+                        _c("label", [_vm._v("Langue de document :")]),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.form.langue,
+                              expression: "form.langue",
+                            },
+                          ],
+                          staticClass: "form-control",
+                          class: {
+                            "is-invalid": _vm.form.errors.has("langue"),
+                          },
+                          attrs: {
+                            disabled: "{!isEditMode}/",
+                            name: "langue",
+                            id: "langue",
+                          },
+                          domProps: { value: _vm.form.langue },
+                          on: {
+                            input: function ($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(_vm.form, "langue", $event.target.value)
+                            },
+                          },
+                        }),
+                        _vm._v(" "),
+                        _c("has-error", {
+                          attrs: { form: _vm.form, field: "langue" },
+                        }),
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "form-group mt-4" },
+                      [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.form.Commentaire,
+                              expression: "form.Commentaire",
+                            },
+                          ],
+                          staticClass: "form-control",
+                          class: {
+                            "is-invalid": _vm.form.errors.has("Commentaire"),
+                          },
+                          attrs: {
+                            disabled: "{!isEditMode}/",
+                            name: "Commentaire",
+                            id: "Commentaire",
+                          },
+                          domProps: { value: _vm.form.Commentaire },
+                          on: {
+                            input: function ($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.form,
+                                "Commentaire",
+                                $event.target.value
+                              )
+                            },
+                          },
+                        }),
+                        _vm._v(" "),
+                        _c("has-error", {
+                          attrs: { form: _vm.form, field: "Commentaire" },
+                        }),
+                      ],
+                      1
+                    ),
+                  ]),
+                  _vm._v(" "),
+                  _vm._m(3),
+                ]
+              ),
+            ]),
+          ]
+        ),
+      ]
+    ),
   ])
 }
 var staticRenderFns = [
@@ -71812,6 +72058,38 @@ var staticRenderFns = [
       _c("th", [_vm._v("Commentaire")]),
       _vm._v(" "),
       _c("th", [_vm._v("  État")]),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "close",
+        attrs: {
+          type: "button",
+          "data-dismiss": "modal",
+          "aria-label": "Close",
+        },
+      },
+      [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+    )
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-footer" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-danger",
+          attrs: { type: "button", "data-dismiss": "modal" },
+        },
+        [_vm._v("Fermer")]
+      ),
     ])
   },
 ]
