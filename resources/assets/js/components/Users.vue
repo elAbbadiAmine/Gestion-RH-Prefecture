@@ -3,65 +3,57 @@
         <div class="row mt-5">
           <div class="col-md-12">
             <div class="card">
-              <div class="card-header">
-
+                <div class="card-header">
                 <h2 class="card-title" style="margin-top: 10px;margin-left: 10px; width: 200px;">Liste des utilisateurs</h2>
-                
-                <form class="card-tools" role="search" >
-                    <input v-model="keyword" class="form-control me-2"  style="width: 280px; margin-right: 210px;margin-top: 8px;" type="search" placeholder="Rechercher par Nom" aria-label="Search" id="shearchField">
+                <form class="card-tools" role="search" ref="#">
+                    <input v-model="keyword"  @click="reset('search')" class="form-control me-2"  style="width: 280px; margin-right: 210px;margin-top: 8px;" type="search" placeholder="Rechercher par Nom" aria-label="Search" id="shearchField">
                 </form>
-                
                 <div class="card-tools">
-                    <button class="btn btn-success" @click="newModal" style="margin-top: 9px;">Ajouter <i class="fas fa-user-plus fa-fw"></i></button>
-                    <a class="btn btn-success" @click="exportExcel" style="margin-top: 9px;">Export <i class="fas fa-file-export fa-fw"></i></a>
+                    <button class="btn btn-success" @click="newModal" style="margin-top: 8px;">Ajouter <i class="fas fa-user-plus fa-fw"></i></button>
+                    <button class="btn btn-success" @click="exportExcel" style="margin-top: 8px;">Exporter <i class="fas fa-file-export fa-fw"></i></button>
                 </div>
+                </div>
+                <div class="navbar navbar-expand-lg bg-light">
+                    <div class="container-fluid">
+
+                <select  id="selectDiv" class='form-control '  style="width: 140px;" @focus="reset('div')" @change="getUsersByDivs();" >
+                    <option disabled selected value> -- Division -- </option>
+                    <option value='0'> - </option>
+                    <option v-for="div in this.divisions" :key="div.id" :value="div.id">{{ div.Division }}</option>
+                </select>
+
+                <span>|</span>
+
+                <select name="type" style="width: 180px;"  id="selectType" class="form-control" @focus="reset('type')" @change="getUsersByType();">
+                    <option disabled selected value> -- Type -- </option>
+                    <option value="admin">Admin</option>
+                    <option value="Utilisateur">Utilisateur standard</option>
+                    <option value="Chef de division">Chef de division</option>
+                </select>
+
+                <span>|</span>
+
+                <div class="form-group">
+                    <input @click="reset('date_from')" type="Date" id="search_date_from" style="width: 160px; margin-top: 15px;"  class="form-control" :class="{ 'is-invalid': form.errors.has('Date_naissance') }">
+                    <has-error :form="form" ></has-error>
+                </div>
+                <div class="form-group">
+                    <input  type="Date" id="search_date_to" style="width: 160px; margin-top: 15px;"   class="form-control" :class="{ 'is-invalid': form.errors.has('Date_naissance') }">
+                    <has-error :form="form" ></has-error>
+                </div>
+                <button @click="getUsersByDate()" class="btn btn-navbar" >
+                    <i class="fa fa-search"></i>
+                </button>
+                <span>|</span>
                 
-              </div>
+                <input class="btn btn-primary" style="width:100px;" type="reset" value="réinitialiser" @click="reset('all')">
 
-    <div class="navbar navbar-expand-lg bg-light">
-        <div class="container-fluid">
-
-            <select  id="selectDiv" class='form-control '  style="width: 140px;" @change="getUsersByDivs(); ">
-                <option disabled selected value> -- Division -- </option>
-                <option value="0"> - </option>
-                <option v-for="div in this.divisions" :key="div.id" :value="div.id">{{ div.Division }}</option>
-            </select>
-
-            <span>|</span>
-
-            <select name="type" style="width: 180px;"  id="selectType" class="form-control"  @change="getUsersByType();">
-                <option disabled selected value> -- Type -- </option>
-                <option value="admin">Admin</option>
-                <option value="Utilisateur">Utilisateur standard</option>
-                <option value="Chef de division">Chef de division</option>
-            </select>
-
-            <span>|</span>
-
-            <div class="form-group">
-                <input type="Date" id="search_date_from" style="width: 160px; margin-top: 15px;" class="form-control" :class="{ 'is-invalid': form.errors.has('Date_naissance') }">
-                <has-error :form="form" ></has-error>
-            </div>
-            <div class="form-group">
-                <input type="Date" id="search_date_to" style="width: 160px; margin-top: 15px;"   class="form-control" :class="{ 'is-invalid': form.errors.has('Date_naissance') }">
-                <has-error :form="form" ></has-error>
-            </div>
-            <button @click="getUsersByDate()" class="btn btn-navbar" >
-                <i class="fa fa-search"></i>
-            </button>
-            <span>|</span>
-            
-            <input class="btn btn-primary" style="width:100px;" type="reset" value="réinitialiser" @click="reset()">
-
-        </div>
-    </div>
-
-
-
-              <!-- /.card-header -->
-              <div class="card-body table-responsive p-0">
+                    </div>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body table-responsive p-0">
                 <table class="table table-hover">
-                  <tbody>
+                    <tbody>
                     <tr>
                         <th>ID</th>
                         <th>Nom</th>
@@ -70,43 +62,42 @@
                         <th>Type</th>
                         <th>Modifier à</th>
                         <th>Modifier</th>
-                  </tr>
+                    </tr>
 
 
-                  <tr v-for="user in users" :key="user.id">
+                    <tr v-for="user in users" :key="user.id">
 
                     <td>{{user.id}}</td>
-                    <td>{{user.nom}}</td>
-                    <td>{{user.Division}}</td>
+                    <td>{{user.nom | capitalizeFirst }}</td>
+                    <td>{{user.Division | capitalize }}</td>
                     <td>{{user.email}}</td>
-                    <td>{{user.type}}</td>
+                    <td>{{user.type | capitalize}}</td>
                     <td>{{ moment(user.created_at).format("DD/MM/YYYY") }}</td>
 
                     <td>
                         <a href="#" @click="viewUser(user)">
                             <i class="fa fa-eye green"></i>
                         </a>
-                        /
-                        <a href="#" @click="editModal(user)">
+                        
+                        <a v-if="user.type != 'admin'" href="#" @click="editModal(user)">
+                            /
                             <i class="fa fa-edit blue"></i>
+                            /
                         </a>
-                        /
-                        <a href="#" @click="deleteUser(user.id)">
+                        
+                        <a v-if="user.type != 'admin'" href="#" @click="deleteUser(user.id)">
                             <i class="fa fa-trash red"></i>
                         </a>
                     </td>
 
-                  </tr>
+                    </tr>
                 </tbody></table>
-              </div>
-              <!-- /.card-body -->
+                </div>
             </div>
-            <!-- /.card -->
           </div>
         </div>
-        
-      <!-- ajouter/modifer Modal-->
-      <div class="modal fade" id="addNew" tabindex="-1" role="dialog" aria-labelledby="addNewLabel" aria-hidden="true">
+        <!-- ajouter/modifer Modal-->
+        <div class="modal fade" id="addNew" tabindex="-1" role="dialog" aria-labelledby="addNewLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
           <div class="modal-content">
             <div class="modal-header">
@@ -162,7 +153,7 @@
                               <has-error :form="form" field="Sex"></has-error>
                           </div>
                           <div class="form-group">
-                              <input type="Date" name="Date_naissance" v-model="form.Date_naissance" id="Date_naissance" class="form-control" :class="{ 'is-invalid': form.errors.has('Date_naissance') }">
+                              <input type="text" name="Date_naissance"  placeholder="Date de Naissance" onfocus="(this.type='date')" v-model="form.Date_naissance" id="Date_naissance" class="form-control" :class="{ 'is-invalid': form.errors.has('Date_naissance') }">
                               <has-error :form="form" field="Date_naissance"></has-error>
                           </div>
                           <div class="form-group">
@@ -197,7 +188,7 @@
                                   <has-error :form="form" field="email"></has-error>
                           </div>
                           <div class="form-group">
-                              <input type="Date" placeholder="Date_recrutement" name="Date_recrutement" v-model="form.Date_recrutement" id="Date_recrutement" class="form-control" :class="{ 'is-invalid': form.errors.has('Date_recrutement') }">
+                              <input type="text" onfocus="(this.type='date')" placeholder="Date de Recrutement" name="Date_recrutement" v-model="form.Date_recrutement" id="Date_recrutement" class="form-control" :class="{ 'is-invalid': form.errors.has('Date_recrutement') }">
                               <has-error :form="form" field="Date_recrutement"></has-error>
                           </div>
                           <div class="form-group">
@@ -233,14 +224,13 @@
             </form>
           </div>
         </div>
-      </div>
-
-      <!-- Afficher info Modal-->
-      <div class="modal fade" id="viewUser" tabindex="-1" role="dialog" aria-labelledby="addNewLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        </div>
+        <!-- Afficher info Modal-->
+        <div class="modal fade" id="viewUser" tabindex="-1" role="dialog" aria-labelledby="addNewLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
           <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title" v-show="editmode" id="addNewLabel">Visualisation</h2>
+                <h2 class="modal-title" v-show="editmode" id="addNewLabel">Détails</h2>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
                 </button>
@@ -258,43 +248,36 @@
                     <div class="row">
                         <div class="col"><!-- Perso-->
                           <div class="form-group">
-                              <input disabled={!isEditMode}/ v-model="form.nom" type="text" name="nom" placeholder="nom"
-                                  class="form-control" :class="{ 'is-invalid': form.errors.has('nom') }">
-                              <has-error :form="form" field="nom"></has-error>
+                              <input disabled={!isEditMode}/ v-model="form.nom" type="text"  placeholder="nom"
+                                  class="form-control" >
                           </div>
                           <div class="form-group">
                               <input disabled={!isEditMode}/ v-model="form.prenom" name="prenom" id="prenom"
                               placeholder="prénom"
-                              class="form-control" :class="{ 'is-invalid': form.errors.has('prenom') }">
-                              <has-error :form="form" field="prenom"></has-error>
+                              class="form-control" >
                           </div>
                           <div class="form-group">
                               <input disabled={!isEditMode}/ type="" v-model="form.CNE" name="CNE" id="CNE"
                               placeholder="CNE"
-                              class="form-control" :class="{ 'is-invalid': form.errors.has('CNE') }">
-                              <has-error :form="form" field="CNE"></has-error>
+                              class="form-control">
                           </div>
                           <div class="form-group">
                               <input disabled={!isEditMode}/ v-model="form.Telephone" name="Telephone" id="Telephone"
                               placeholder="Telephone"
-                              class="form-control" :class="{ 'is-invalid': form.errors.has('Telephone') }">
-                              <has-error :form="form" field="Telephone"></has-error>
+                              class="form-control" >
                           </div>
                           <div class="form-group">
                             <input disabled={!isEditMode}/ v-model="form.Sex" name="Sex" id="Sex"
                              
-                              class="form-control" :class="{ 'is-invalid': form.errors.has('Sex') }">
-                              <has-error :form="form" field="Sex"></has-error>                              
+                              class="form-control" >
                           </div>
                           <div class="form-group">
                               <input disabled={!isEditMode}/ type="Date" name="Date_naissance" v-model="form.Date_naissance" id="Date_naissance" class="form-control" :class="{ 'is-invalid': form.errors.has('Date_naissance') }">
-                              <has-error :form="form" field="Date_naissance"></has-error>
                           </div>
                           <div class="form-group">
                               <textarea disabled={!isEditMode}/ v-model="form.Adresse" name="Adresse" id="Adresse"
                               placeholder="Adresse"
-                              class="form-control" :class="{ 'is-invalid': form.errors.has('Adresse') }"></textarea>
-                              <has-error :form="form" field="Adresse"></has-error>
+                              class="form-control" ></textarea>
                           </div>
 
                         </div>
@@ -302,40 +285,33 @@
                           <div class="form-group">
                                   <input disabled={!isEditMode}/ v-model="form.Matricule" name="Matricule" id="Matricule"
                                   placeholder="Matricule"
-                                  class="form-control" :class="{ 'is-invalid': form.errors.has('Matricule') }">
-                                  <has-error :form="form" field="Matricule"></has-error>
+                                  class="form-control" >
                           </div>
                           <div class="form-group">
                              <input disabled={!isEditMode}/ v-model="form.Division" name="division" id="division" 
-                                  class="form-control" :class="{ 'is-invalid': form.errors.has('division') }">
-                                  <has-error :form="form" field="division"></has-error>
+                                  class="form-control" >
                           </div>
                           <div class="form-group">
                                   <input disabled={!isEditMode}/ v-model="form.email" type="email" name="email"
                                       placeholder="Email Address"
-                                      class="form-control" :class="{ 'is-invalid': form.errors.has('email') }">
-                                  <has-error :form="form" field="email"></has-error>
+                                      class="form-control" >
                           </div>
                           <div class="form-group">
-                              <input disabled={!isEditMode}/ type="Date" placeholder="Date_recrutement" name="Date_recrutement" v-model="form.Date_recrutement" id="Date_recrutement" class="form-control" :class="{ 'is-invalid': form.errors.has('Date_recrutement') }">
-                              <has-error :form="form" field="Date_recrutement"></has-error>
+                              <input disabled={!isEditMode}/ type="Date" placeholder="Date_recrutement" name="Date_recrutement" v-model="form.Date_recrutement" id="Date_recrutement" class="form-control" >
                           </div>
                           <div class="form-group">
                               <input disabled={!isEditMode}/ v-model="form.Intitule" name="Intitule" id="Intitule"
                               placeholder="Intitule"
-                              class="form-control" :class="{ 'is-invalid': form.errors.has('Intitule') }">
-                              <has-error :form="form" field="Intitule"></has-error>
+                              class="form-control" >
                           </div>
                           <div class="form-group">
                                   <textarea disabled={!isEditMode}/ v-model="form.bio" name="bio" id="bio"
                                   placeholder="Commentaire"
-                                  class="form-control" :class="{ 'is-invalid': form.errors.has('bio') }"></textarea>
-                                  <has-error :form="form" field="bio"></has-error>
+                                  class="form-control" ></textarea>
                           </div>
                           <div class="form-group">
                             <input disabled={!isEditMode}/ v-model="form.type" name="type" id="type" 
-                                  class="form-control" :class="{ 'is-invalid': form.errors.has('type') }">
-                                  <has-error :form="form" field="type"></has-error>
+                                  class="form-control" >
                           </div>
 
                         </div>
@@ -345,23 +321,33 @@
               <div class="modal-footer">
                   <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
               </div>
-          </div>
+            </div>
+            </div>
         </div>
-      </div>
-
-      
-
     </div>
-    
 </template>
+
+
 <script>
+
 import swal from 'sweetalert2';
 import moment from "moment";
 import { saveExcel } from '@progress/kendo-vue-excel-export';
 import { Grid } from '@progress/kendo-vue-grid';
 
     export default {
-        
+        filters: {
+                capitalize: function (value) {
+                if (!value) return ''
+                    return value.toUpperCase()
+                },
+                capitalizeFirst: function(value){
+                    if (!value) return ''
+                        value = value.toString()
+                        return value.charAt(0).toUpperCase() + value.slice(1)
+                }
+
+        },
         data() {
             return {  
                 moment: moment, 
@@ -392,6 +378,9 @@ import { Grid } from '@progress/kendo-vue-grid';
         },
         watch: {
             keyword(after, before) {
+                if(this.keyword == ""){
+                    Fire.$emit('AfterCreate');
+                }
                 this.getUsersByName();
             }
         },
@@ -406,8 +395,8 @@ import { Grid } from '@progress/kendo-vue-grid';
                         'Informations modifier',
                         'Succès'
                     )
-                        this.$Progress.finish();
-                        Fire.$emit('AfterCreate');
+                    this.$Progress.finish();
+                    Fire.$emit('AfterCreate');
                 })
                 .catch(() => {
                     this.$Progress.fail();
@@ -452,7 +441,7 @@ import { Grid } from '@progress/kendo-vue-grid';
                                     swal("Manqué!", "Il y avait quelque chose qui n'allait pas.", "warning");
                                 });
                          }
-                    })
+                    }).catch(console.log("eroooooooooooooooooooooooooooooooorrr"));
             },
             loadUsers(){
                 axios.get("api/user").then(({ data }) => (this.users = data))
@@ -467,12 +456,14 @@ import { Grid } from '@progress/kendo-vue-grid';
             getUsersByDivs(){
                 var idDev = document.getElementById("selectDiv").value;
                 axios.get("api/getByDivision/"+idDev).then(({ data }) => (this.users = data))
-            },getUsersByName(){
+            },
+            getUsersByName(){
                 this.$Progress.start();
                 var nom = document.getElementById("shearchField").value;
                 axios.get("api/getByName/"+nom).then(({ data }) => (this.users = data))
                 this.$Progress.finish();
-            },getUsersByDate(){
+            },
+            getUsersByDate(){
                 var date_from = document.getElementById("search_date_from").value;
                 var date_to = document.getElementById("search_date_to").value;
 
@@ -490,16 +481,32 @@ import { Grid } from '@progress/kendo-vue-grid';
                     confirmButtonText: 'Ok'
                 })});
             },
-            reset(){
-                $('#selectDiv').prop('selectedIndex',0);
-                $('#selectType').prop('selectedIndex',0);
-                $('#shearchField').val('');
+            reset(valeur){
+
+                if(valeur != 'div' || valeur == 'all')
+                    $('#selectDiv').prop('selectedIndex',0);
+                    Fire.$emit('AfterCreate');
+
+                if(valeur != 'type' || valeur == 'all')
+                    $('#selectType').prop('selectedIndex',0);
+
+                if(valeur != 'search' || valeur == 'all')
+                    this.keyword="";   
+                    $('#shearchField').val('');
+
+                if(valeur != 'date_from' || valeur == 'all')
+                    $('#search_date_from').val('');
+
+                if(valeur != 'date_to' || valeur == 'all')
+                    $('#search_date_to').val('');
+                
                 Fire.$emit('AfterCreate');
+
             },
             exportExcel(){
                 saveExcel({
                 data: this.users,
-                fileName: "users",
+                fileName: "utilisateurs",
                 columns: [
                 { field: 'id', title: 'ID' },
                 { field: 'nom', title: 'Nom' },
@@ -512,7 +519,6 @@ import { Grid } from '@progress/kendo-vue-grid';
             },
             createUser(){
                 this.$Progress.start();
-               
                 this.form.post('api/user')
                 .then(()=>{
                     swal.fire(
@@ -523,13 +529,13 @@ import { Grid } from '@progress/kendo-vue-grid';
                     Fire.$emit('AfterCreate');
                     $('#addNew').modal('hide')
                     toast({
-                        type: 'success',
+                        type: 'success', 
                         title: 'Utilisateur créé avec succès'
                         })  
                     this.$Progress.finish();
                 })
                 .catch(()=>{
-                    
+                    this.$Progress.fail();
                 })
             }
         },

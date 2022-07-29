@@ -34,10 +34,9 @@
                         <ul class="nav nav-pills">
                         <li class="nav-item"><a class="nav-link active show" href="#settings" data-toggle="tab">Parametre</a></li>
                         </ul>
-                    </div><!-- /.card-header -->
+                    </div>
                     <div class="card-body">
                         <div class="tab-content">
-                            <!-- Setting Tab -->
                             <div class="tab-pane active show" id="settings">
                                 <form class="form-horizontal">
                                 <div class="form-group">
@@ -152,14 +151,14 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="password" class="col-sm-12 control-label">Passport (leave empty if not changing)</label>
+                                    <label for="password" class="col-sm-12 control-label">Mot de passe</label>
 
                                     <div class="col-sm-12">
                                     <input type="password"
                                         v-model="form.password"
                                         class="form-control"
                                         id="password"
-                                        placeholder="Passport"
+                                        placeholder="Mot de passe"
                                         :class="{ 'is-invalid': form.errors.has('password') }"
                                     >
                                      <has-error :form="form" field="password"></has-error>
@@ -220,11 +219,9 @@
         methods:{
 
             getProfilePhoto(){
-
                 let photo = (this.form.photo.length > 200) ? this.form.photo : "img/profile/"+ this.form.photo ;
                 return photo;
             },
-
             updateInfo(){
                 this.$Progress.start();
                 if(this.form.password == ''){
@@ -232,7 +229,7 @@
                 }
                 this.form.put('api/profile')
                 .then(()=>{
-                     Fire.$emit('AfterCreate');
+                    Fire.$emit('AfterCreate');
                     this.$Progress.finish();
                 })
                 .catch(() => {
@@ -240,20 +237,17 @@
                 });
             },
             updateProfile(e){
-                // console.log('uploading');
                     let file = e.target.files[0];
                     console.log(file);
                     let reader = new FileReader();
-                    // let vm = this;
                     if(file['size'] < 2111775){
                         reader.onloadend = (file) => {
-                            // console.log('RESULT', reader.result)
                             this.form.photo = reader.result;
                         }
                         reader.readAsDataURL(file);
                     }else{
                          swal({
-                            type: 'error',
+                            type: 'erreur',
                             title: 'Oops...',
                             text: 'Vous téléchargez un gros fichier',
                         })

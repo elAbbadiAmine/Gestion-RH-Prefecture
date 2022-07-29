@@ -44,7 +44,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="./img/profile.png" class="img-circle elevation-2" alt="User Image">
+          <img src="./img/profile/profile.png" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
           <a href="#" class="d-block">
@@ -71,7 +71,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             @can('isAdmin')
             <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
-            <i class="nav-icon fa fa-list" ></i>
+            <i class="nav-icon fa fa-list" style="color:DodgerBlue"></i>
               <p>
                 Demandes
                 <i class="right fa fa-angle-left"></i>
@@ -139,7 +139,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           @endcan
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
-              <i class="nav-icon fa fa-cog "></i>
+              <i class="nav-icon fa fa-file-circle-check" style="color:green"></i>
               <p>
                 Depot d'une demande
                 <i class="right fa fa-angle-left"></i>
@@ -205,7 +205,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           @can('isAdmin')
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
-              <i class="nav-icon fa fa-cog "></i>
+              <i class="nav-icon fa fa-cog" style="color:GreenYellow"></i>
               <p>
                 Management
                 <i class="right fa fa-angle-left"></i>
@@ -229,7 +229,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
          @endcan
           <li class="nav-item">
                 <router-link to="/profile" class="nav-link">
-                    <i class="nav-icon fas fa-user "></i>
+                    <i class="nav-icon fas fa-user" style="color:Coral"></i>
                     <p>
                         Profil
                     </p>
@@ -240,7 +240,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <a class="nav-link" href="{{ route('logout') }}"
                 onclick="event.preventDefault();
                               document.getElementById('logout-form').submit();">
-                    <i class="nav-icon fa fa-power-off "></i>
+                    <i class="nav-icon fa fa-power-off " style="color:Crimson"></i>
                     <p>
                         {{ __('Déconnexion') }}
                     </p>

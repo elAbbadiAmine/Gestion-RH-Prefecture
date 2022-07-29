@@ -38,14 +38,12 @@ Route::put('service/{id}', 'API\ServController@update');
 Route::get('ServDivision','API\ServController@ServDivision');
 
 
-Route::get('export', 'API\UserController@export');
+Route::get('division/getByName/{nom}','API\DivisionController@getDivsByName');
 
 
 Route::get('getByDate/{dateFrom}/{dateTo}','API\UserController@getUsersByDate');
 
-
 Route::get('getByName/{nom}','API\UserController@getUsersByName');
-
 
 Route::get('getByType/{type}','API\UserController@getUsersByType');
 

@@ -244,7 +244,7 @@ class UserController extends Controller
         if($id == '0'){
             foreach($users as $user){
                 $idDiv = $user -> Division;
-                if($idDiv == '-'){
+                if($idDiv == Null){
                     $user -> Division ='-';
                     $results[]= $user;
                 }
@@ -329,8 +329,5 @@ class UserController extends Controller
         return $results;
     }
     
-    public function export() 
-    {
-        return Excel::download(new UserExport, 'users.xlsx');
-    }
+   
 }

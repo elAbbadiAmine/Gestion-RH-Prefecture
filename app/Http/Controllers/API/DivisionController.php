@@ -142,5 +142,22 @@ class DivisionController extends Controller
         return ['data' => $result]; // or return response()->json(['data' => employees]);
     }
 
-    
+    public function getDivsByName($nom){
+        $divs = Division::latest()->paginate(20);
+        $results=[];
+        $nom = strtolower($nom);
+
+        foreach($divs as $div){      
+            $nomDiv = strtolower($div -> Division);
+
+            if(str_contains($nomDiv,$nom) == true){
+                $chef_division =  User::findOrFail($div->Chef_division); 
+                $div->Chef_division = $chef_division ? $chef_division->nom." ".$chef_division->prenom : '';
+                $results[] = $div;
+            }
+        
+        }
+        
+        return $results;
+    }
 }
