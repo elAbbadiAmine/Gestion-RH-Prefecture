@@ -12,8 +12,8 @@
                 </form>
                 
                 <div class="card-tools">
-                    <button class="btn btn-success" @click="newModal" style="margin-top: 8px;">Ajouter <i class="fas fa-user-plus fa-fw"></i></button>
-                    <a class="btn btn-success" @click="exportExcel" style="margin-top: 8px;">Export <i class="fas fa-file-export fa-fw"></i></a>
+                    <button class="btn btn-success" @click="newModal" style="margin-top: 9px;">Ajouter <i class="fas fa-user-plus fa-fw"></i></button>
+                    <a class="btn btn-success" @click="exportExcel" style="margin-top: 9px;">Export <i class="fas fa-file-export fa-fw"></i></a>
                 </div>
                 
               </div>
