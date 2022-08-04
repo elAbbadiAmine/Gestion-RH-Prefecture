@@ -3,7 +3,7 @@
         <div class="row justify-content-center mt-5">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">Demande de congé</div>
+                    <div class="card-header">Demande de congé </div>
                     <form @submit.prevent=" create_demande()">
 
                         <div class="card-body">
@@ -51,6 +51,8 @@
    
 <script>
 import { exit } from 'process';
+import swal from 'sweetalert2';
+
     export default {
         data() {
             return {             
@@ -61,7 +63,6 @@ import { exit } from 'process';
                     date_debut:'',
                     date_fin:'',
                     type:'',
-                    durée: '',
                     Commentaire:''
                     })
             };
@@ -99,39 +100,28 @@ import { exit } from 'process';
             },
             create_demande(){
                 this.$Progress.start();
-                this.form.post('api/demande_conge')
-                .then(()=>{
+                this.form.post('api/demande_conge').then(()=>{
                     swal.fire(
                         'Succès',
                         'la demande a été bien crée',
                         'succés'
-                        )
+                        );
                     Fire.$emit('AfterCreate');
-                    $('#addNew').modal('hide')
-                    toast({
-                        type: 'success',
-                        title: 'la demande a été crée avec succés'
-                        })
+                this.form.reset();
                 this.$Progress.finish();
                 })
                 .catch(()=>{
-                    
+                    this.$Progress.fail();
                 });
-                
+                this.form.reset();
+                this.form.clear();
             },
             postUser(){
 
             }
-            // getUser(){
-            //     var id = this.$route.params.id;
-                
-            //     this.form.utilisateur = id;
-            //     axios.get('api/utilisateur/'+id).then(({ data }) => (this.users = data))
-            // },
             
         },
         
-        //    setInterval(() => this.loadServices(), 3000);
-            }
+    }
     
 </script>

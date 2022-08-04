@@ -32,7 +32,6 @@ class UserController extends Controller
      */
     public function index()
     {
-       //$this->authorize('isAdmin');
         $users = User::latest()->paginate(20);
         $results=[];
         foreach($users as $user){
@@ -59,8 +58,45 @@ class UserController extends Controller
         $this->validate($request,[
             'nom' => 'required|string|max:191',
             'email' => 'required|string|email|max:191|unique:users',
-            'password' => 'required|string|min:6'
-        ]);
+            'password' => 'required|string|min:6',
+            'prenom' => 'required|string|max:30',
+            'CNE' => 'required|string|max:191|unique:users',
+            'Matricule' => 'required|string|max:191|unique:users',
+            'Adresse' => 'required|string|max:191',
+            'Telephone' => 'required|string|max:10|min:10|unique:users',
+            'Date_recrutement' => 'required',
+            'type' => 'required'
+
+        ],
+        [
+            'password.min' => 'Pour des raisons de sécurité, votre mot de passe doit faire :min caractères.',
+            'password.required' => 'Le Mot de passe est obligatoire.',
+
+            'nom.required' => 'Le nom est obligatoire.',
+            
+            'prenom.required' => 'Le prenom est obligatoire.',
+
+            'email.required' =>"L'email est obligatoire.",
+            'email.unique' =>"L'email doit être unique .",
+
+            'password.required' => 'Le Mot de passe est obligatoire.',
+
+            'CNE.required' => 'Le CNE est obligatoire.',
+
+            'Matricule.required' => 'Le Matricule est obligatoire.',
+            
+            'Adresse.required' => "L'Adresse est obligatoire.",
+            
+            'Telephone.required' => 'Le Numero de télèphone est obligatoire.',
+            
+            'Date_recrutement.required' => 'La Date de recrutement est obligatoire.',
+            
+            'type.required' => 'Le type est obligatoire.',
+
+            
+       
+        ]
+    );
         $newUser = new User();
         $newUser->nom = $request['nom'];
         $newUser->prenom = $request['prenom'];

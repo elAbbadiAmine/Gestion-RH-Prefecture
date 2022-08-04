@@ -27,7 +27,7 @@
     "dependencies": {
         "@fortawesome/fontawesome-free": "^6.1.1",
         "@progress/kendo-vue-excel-export": "^3.4.4",
-        "@progress/kendo-vue-grid": "^3.4.4",
+        "@progress/kendo-vue-grid": "^3.4.5",
         "admin-lte": "^3.0.0-alpha.2",
         "autoprefixer": "10.4.5",
         "laravel-vue-pagination": "^3.0.0",
@@ -36,6 +36,7 @@
         "vform": "^2.1.2",
         "vue-moment": "^4.1.0",
         "vue-progressbar": "^0.7.5",
-        "vue-router": "^3.5.3"
+        "vue-router": "^3.5.3",
+        "vue-step-progress": "^0.3.8"
     }
 }

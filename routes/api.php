@@ -18,6 +18,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::delete('demande_conge/{id}','API\DemandeCongeController@destroy');
+
+
+
 Route::apiResources(['user' => 'API\UserController']);
 Route::get('profile', 'API\UserController@profile');
 Route::put('profile', 'API\UserController@updateProfile');
@@ -60,6 +64,9 @@ Route::get('getByDivision/{id}','API\UserController@getUsersByDiv');
 
 // les demandes
 Route::post('demande_conge','API\DemandeCongeController@store');
+
+Route::get('getSolde/{id}','API\DemandeCongeController@getSoldeByConge');
+
 Route::get('loadDemandeConge','API\DemandeCongeController@index');
 
 Route::get('loadDemandeCongeChef','API\DemandeCongeControllerChef@index');
@@ -72,3 +79,11 @@ Route::post('demande_rh','API\DemandeRhController@store');
 Route::get('loadDemandeRh','API\DemandeRhController@index');
 
 Route::get('loadDemandeRhChef','API\DemandeRhChefController@index');
+
+
+
+// les etat
+Route::get('getCongeEtat/{idConge}','API\DemandeCongeController@getEtat');
+
+
+Route::post('setCongeEtat/{idConge}/{idEtat}','API\DemandeCongeController@setEtat');

@@ -22,7 +22,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Left navbar links -->
     <ul class="navbar-nav">
       <li class="nav-item">
-          <a class="nav-link" data-widget="pushmenu" href="#"><i class="fa fa-bars"></i></a>
+          <a class="nav-link" id="menu" data-widget="pushmenu" href="#"><i class="fa fa-bars"></i></a>
       </li>
     </ul>
 
@@ -36,7 +36,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="/" class="brand-link">
-      <span class="brand-text font-weight-light">Gestion RH</span>
+      <span class="brand-text font-weight-light" style="margin-left: 30px">Préfecture de Fès</span>
     </a>
 
     <!-- Sidebar -->
@@ -48,7 +48,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
         </div>
         <div class="info">
           <a href="#" class="d-block">
-              {{Auth::user()->nom}}
+              Bonjour
+                @switch( strval(Auth::user()->Sex) )
+                    @case('Homme')
+                       Mr.
+                    @break
+
+
+                    @case('Femme')
+                        Mme.
+                    @break
+                 @endswitch
+                {{ ucfirst (Auth::user()->nom) }}
+
           </a>
         </div>
       </div>
@@ -56,45 +68,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <!-- Sidebar Menu -->
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <!-- Add icons to the links using the .nav-icon class
-               with font-awesome or any other icon font library -->
-
-            <!-- <li class="nav-item">
-            <router-link to="/dashboard" class="nav-link">
-                <i class="nav-icon fas fa-tachometer-alt "></i>
-                <p>
-                Tableau de bord
-
-                </p>
-            </router-link>
-            </li> -->
-            @can('isAdmin')
+          
+          @can('isUser')
             <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
-            <i class="nav-icon fa fa-list" style="color:DodgerBlue"></i>
-              <p>
-                Demandes
-                <i class="right fa fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <router-link to="/Demande_conge_all" class="nav-link">
-                <i class="fa-solid fa-calendar-days fa-fw"></i>
-                  <p>Demande de congé</p>
-                </router-link>
-                <router-link to="/Demande_document_RH_all" class="nav-link">
-                <i class="fa-solid fa-file fa-fw"></i>
-                  <p>Demande de document RH</p>
-                </router-link>
-              </li>
-            </ul>
-          </li>
-            @endcan
-            @can('isUser')
-            <li class="nav-item has-treeview">
-            <a href="#" class="nav-link">
-            <i class="nav-icon fa fa-list" ></i>
+            <i class="nav-icon fa fa-list" style="color:lightseagreen"></i>
               <p>
                 Mes Demandes
                 <i class="right fa fa-angle-left"></i>
@@ -103,43 +81,21 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <ul class="nav nav-treeview">
               <li class="nav-item">
                 <router-link to="/Demande_conge" class="nav-link">
-                <i class="fa-solid fa-calendar-days fa-fw"></i>
-                  <p>Demande de congé</p>
+                <i class="fa-solid fa-calendar-days fa-fw" style="margin-left: 15px"></i>
+                  <p>Congé</p>
                 </router-link>
-                <router-link to="/Demande_document_RH" class="nav-link">
-                <i class="fa-solid fa-file fa-fw"></i>
-                  <p>Demande de document RH</p>
-                </router-link>
-              </li>
-            </ul>
-          </li>
-          @endcan
-          @can('isAuthor')
-            <li class="nav-item has-treeview">
-            <a href="#" class="nav-link">
-            <i class="nav-icon fa fa-list" ></i>
-              <p>
-                Mes Demandes
-                <i class="right fa fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <router-link to="/Demande_conge" class="nav-link">
-                <i class="fa-solid fa-calendar-days fa-fw"></i>
-                  <p>Demande de congé</p>
-                </router-link>
-                <router-link to="/Demande_document_RH" class="nav-link">
-                <i class="fa-solid fa-file fa-fw"></i>
-                  <p>Demande de document RH</p>
+                <router-link to="/Demande_document_RH" class="nav-link" >
+                <i class="fa-solid fa-file fa-fw" style="margin-left: 15px"></i>
+                  <p>Document RH</p>
                 </router-link>
               </li>
             </ul>
           </li>
           @endcan
-          <li class="nav-item has-treeview">
+
+         <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
-              <i class="nav-icon fa fa-file-circle-check" style="color:green"></i>
+              <i class="nav-icon fa fa-file-circle-check" style="color:lightskyblue"></i>
               <p>
                 Depot d'une demande
                 <i class="right fa fa-angle-left"></i>
@@ -148,20 +104,44 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <ul class="nav nav-treeview">
               <li class="nav-item">
                 <router-link to="/Depot_Demande_conge" class="nav-link">
-                <i class="fa-solid fa-calendar-days fa-fw"></i>
-                  <p>Demande de congé</p>
+                <i class="fa-solid fa-calendar-days fa-fw" style="margin-left: 15px"></i>
+                  <p>Congé</p>
                 </router-link>
                 <router-link to="/Depot_Demande_document_RH" class="nav-link">
-                <i class="fa-solid fa-file fa-fw"></i>
-                  <p>Demande de document RH</p>
+                <i class="fa-solid fa-file fa-fw" style="margin-left: 15px"></i>
+                  <p>Document RH</p>
                 </router-link>
               </li>
             </ul>
           </li>
           @can('isAuthor')
           <li class="nav-item has-treeview">
+          <a href="#" class="nav-link">
+          <i class="nav-icon fa fa-list" style="color:yellow"></i>
+            <p>
+              Mes Demandes
+              <i class="right fa fa-angle-left"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <router-link to="/Demande_conge" class="nav-link">
+              <i class="fa-solid fa-calendar-days fa-fw"></i>
+                <p>Congé</p>
+              </router-link>
+              <router-link to="/Demande_document_RH" class="nav-link">
+              <i class="fa-solid fa-file fa-fw"></i>
+                <p>Document RH</p>
+              </router-link>
+            </li>
+          </ul>
+        </li>
+        @endcan
+
+          @can('isAuthor')
+          <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
-            <i class="nav-icon fa-regular fa-rectangle-list"></i>
+            <i class="nav-icon fa fa-cog" style="color:GreenYellow"></i>
               <p>
                 Liste des demandes
                 <i class="right fa fa-angle-left"></i>
@@ -171,32 +151,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <li class="nav-item">
                 <router-link to="/Demande_conge_chef" class="nav-link">
                 <i class="fa-solid fa-calendar-days fa-fw"></i>
-                  <p>Demande de congé</p>
+                  <p>Congé</p>
                 </router-link>
                 <router-link to="/Demande_document_RH_chef" class="nav-link">
                 <i class="fa-solid fa-file fa-fw"></i>
-                  <p>Demande de document RH</p>
-                </router-link>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item has-treeview">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fa fa-cog "></i>
-              <p>
-                Depot d'une demande
-                <i class="right fa fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <router-link to="/Depot_Demande_conge" class="nav-link">
-                <i class="fa-solid fa-calendar-days fa-fw"></i>
-                  <p>Demande de congé</p>
-                </router-link>
-                <router-link to="/Depot_Demande_document_RH" class="nav-link">
-                <i class="fa-solid fa-file fa-fw"></i>
-                  <p>Demande de document RH</p>
+                  <p>Document RH</p>
                 </router-link>
               </li>
             </ul>
@@ -214,13 +173,35 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <ul class="nav nav-treeview">
               <li class="nav-item">
                 <router-link to="/users" class="nav-link">
-                  <i class="fas fa-users nav-icon"></i>
+                  <i  class="fas fa-users nav-icon"></i>
                   <p>Utilisateurs</p>
                 </router-link>
                 <router-link to="/Division" class="nav-link">
-                  <i class="fas fa-layer-group pr-2" style='font-size:17px'></i>
+                  <i class="fas fa-layer-group nav-icon"></i>
                   <p>Divisions</p>
                 </router-link>
+
+                <li class="nav-item has-treeview">
+                  <a href="#" class="nav-link">
+                  <i class="nav-icon fa fa-list" ></i>
+                    <p>
+                      Demandes
+                      <i class="right fa fa-angle-left"></i>
+                    </p>
+                  </a>
+                  <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                      <router-link to="/Demande_conge_all" class="nav-link">
+                      <i class="fa-solid fa-calendar-days fa-fw"></i>
+                        <p>Congé</p>
+                      </router-link>
+                      <router-link to="/Demande_document_RH_all" class="nav-link">
+                      <i  class="fa-solid fa-file fa-fw"></i>
+                        <p>Document RH</p>
+                      </router-link>
+                    </li>
+                  </ul>
+                </li>
               </li>
 
             </ul>
@@ -229,7 +210,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
          @endcan
           <li class="nav-item">
                 <router-link to="/profile" class="nav-link">
-                    <i class="nav-icon fas fa-user" style="color:Coral"></i>
+                    <i class="nav-icon fas fa-user" style="color:lightcoral"></i>
                     <p>
                         Profil
                     </p>
@@ -240,7 +221,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <a class="nav-link" href="{{ route('logout') }}"
                 onclick="event.preventDefault();
                               document.getElementById('logout-form').submit();">
-                    <i class="nav-icon fa fa-power-off " style="color:Crimson"></i>
+                    <i class="nav-icon fa fa-power-off " style="color:red"></i>
                     <p>
                         {{ __('Déconnexion') }}
                     </p>
@@ -275,11 +256,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
   <!-- Main Footer -->
   <footer class="main-footer">
-    <!-- To the right -->
-    <div class="float-right d-none d-sm-inline">
-      Anything you want
-    </div>
-    <!-- Default to the left -->
+
   </footer>
 </div>
 <!-- ./wrapper -->

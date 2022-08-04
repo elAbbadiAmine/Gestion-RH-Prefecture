@@ -7,6 +7,9 @@
                         <h3 class="card-title">Liste des demandes de document RH</h3>
                         <div class="card-tools">
                             <button class="btn btn-success"><i class="nav-icon fas fa-file-excel fa-fw"></i> Généré fichier excel </button>
+                            <button  v-if="Object.keys(this.conges).length != 0 "  class="btn btn-success" @click="exportExcel" style="margin-top: 8px;">Exporter <i class="fas fa-file-export fa-fw"></i></button>
+                            <button :disabled="isDisabled"   v-else class="btn btn-success" style="margin-top: 8px; background-color: lightgray; border-color: gray;">Exporter <i class="fas fa-file-export fa-fw"></i></button>
+                         
                         </div>
                     </div>
                     <!-- /.card-header -->

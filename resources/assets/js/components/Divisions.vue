@@ -7,8 +7,9 @@
                         <h3 class="card-title">Liste des divisions</h3>                       
                         <div class="card-tools">
                             <button class="btn btn-success" @click="newModal">Ajouter <i class="fas fa-circle-plus fa-fw"></i></button>
-                            <button class="btn btn-success" @click="exportExcel">Exporter <i class="fas fa-file-export fa-fw"></i></button>
-                        </div>
+                            <button v-if="Object.keys(this.divisions).length != 0 " class="btn btn-success" @click="exportExcel">Exporter <i class="fas fa-file-export fa-fw"></i></button>
+                            <button  v-else class="btn btn-success" style="background-color: lightgray; border-color: gray;">Exporter <i class="fas fa-file-export fa-fw"></i></button>                      
+                       </div>
                     </div>
                     <div class="navbar navbar-expand-lg bg-light">
                         <div style="margin-left: -420px;" class="container-fluid">
@@ -257,8 +258,7 @@ export default {
                 return "/Service/"+id;
             }
         },
-
-            created() {
+        created() {
                 this.loadDivisions();
                 this.UserDivisions();
                 Fire.$on('AfterCreate',() => {
@@ -266,13 +266,8 @@ export default {
                 this.UserDivisions();
 
            });
-        //    setInterval(() => this.loadDivisions(), 3000);
-            }
+        }
 }
-            
-
-
-
 </script>
 
 <style>

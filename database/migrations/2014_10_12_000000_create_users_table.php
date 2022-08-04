@@ -19,7 +19,6 @@ class CreateUsersTable extends Migration
             $table->string('prenom')->nullable();
             $table->string('CNE')->inuque()->nullable();
             $table->unsignedInteger('Division')->nullable();
-           // $table->foreign('Division')->references('id')->on('division');
             $table->string('Matricule')->unique()->nullable();
             $table->string('Sex')->nullable();
             $table->date('Date_naissance')->nullable();
@@ -32,6 +31,7 @@ class CreateUsersTable extends Migration
             $table->string('type')->default('admin')->nullable();
             $table->mediumText('bio')->nullable();
             $table->string('photo')->default('profile.png')->nullable();
+            $table->unsignedInteger('solde')->default(22)->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

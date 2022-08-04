@@ -60,11 +60,14 @@ class DivisionController extends Controller
         $newDivision->Chef_division = $request['Chef_division'];
 
         $newDivision->save();
+        
+        
+        //le id de division 
 
-       // return Division::create([
-           // 'Division' => $request['Division'],           
-          //  'Chefdivision' => $request['Chefdivision'],
-       // ]);
+        $idDiv = $newDivision->id;
+        $user = User::findOrFail($request['Chef_division']);
+        $user->Division = $idDiv;
+        $user->save();
 
         return ['message' => "created"];
     }

@@ -10,7 +10,8 @@
                 </form>
                 <div class="card-tools">
                     <button class="btn btn-success" @click="newModal" style="margin-top: 8px;">Ajouter <i class="fas fa-user-plus fa-fw"></i></button>
-                    <button class="btn btn-success" @click="exportExcel" style="margin-top: 8px;">Exporter <i class="fas fa-file-export fa-fw"></i></button>
+                    <button  v-if="Object.keys(this.users).length != 0 "  class="btn btn-success" @click="exportExcel" style="margin-top: 8px;">Exporter <i class="fas fa-file-export fa-fw"></i></button>
+                    <button :disabled="isDisabled"   v-else class="btn btn-success" style="margin-top: 8px; background-color: lightgray; border-color: gray;">Exporter <i class="fas fa-file-export fa-fw"></i></button>
                 </div>
                 </div>
                 <div class="navbar navbar-expand-lg bg-light">
@@ -32,11 +33,12 @@
                 </select>
 
                 <span>|</span>
-
+                <label style="margin-top: 5px;">Du</label>
                 <div class="form-group">
                     <input @click="reset('date_from')" type="Date" id="search_date_from" style="width: 160px; margin-top: 15px;"  class="form-control" :class="{ 'is-invalid': form.errors.has('Date_naissance') }">
                     <has-error :form="form" ></has-error>
                 </div>
+                <label style="margin-top: 5px;">Au</label>
                 <div class="form-group">
                     <input  type="Date" id="search_date_to" style="width: 160px; margin-top: 15px;"   class="form-control" :class="{ 'is-invalid': form.errors.has('Date_naissance') }">
                     <has-error :form="form" ></has-error>
@@ -71,7 +73,7 @@
                     <td>{{user.nom | capitalizeFirst }}</td>
                     <td>{{user.Division | capitalize }}</td>
                     <td>{{user.email}}</td>
-                    <td>{{user.type | capitalize}}</td>
+                    <td>{{user.type | capitalizeFirst}}</td>
                     <td>{{ moment(user.created_at).format("DD/MM/YYYY") }}</td>
 
                     <td>
@@ -403,9 +405,10 @@ import { Grid } from '@progress/kendo-vue-grid';
                 });
 
             },
+            
             editModal(user){
                 this.editmode = true;
-                this.form.reset();
+                this.form.clear();
                 $('#addNew').modal('show');
                 this.form.fill(user);
             },
@@ -416,7 +419,7 @@ import { Grid } from '@progress/kendo-vue-grid';
             },
             newModal(){
                 this.editmode = false;
-                this.form.reset();
+                this.form.clear();
                 $('#addNew').modal('show');
             },
             deleteUser(id){
@@ -441,7 +444,7 @@ import { Grid } from '@progress/kendo-vue-grid';
                                     swal("Manqué!", "Il y avait quelque chose qui n'allait pas.", "warning");
                                 });
                          }
-                    }).catch(console.log("eroooooooooooooooooooooooooooooooorrr"));
+                    }).catch();
             },
             loadUsers(){
                 axios.get("api/user").then(({ data }) => (this.users = data))
