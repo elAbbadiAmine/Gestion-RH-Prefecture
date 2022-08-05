@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Division;
 use App\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
+
 
 class DivisionController extends Controller
 {
@@ -146,19 +148,18 @@ class DivisionController extends Controller
     }
 
     public function getDivsByName($nom){
-        $divs = Division::latest()->paginate(20);
+
         $results=[];
-        $nom = strtolower($nom);
+
+        $divs = DB::table('division')->where([
+            ['Division', 'like', '%' . $nom . '%']
+        ])->get();
+
 
         foreach($divs as $div){      
-            $nomDiv = strtolower($div -> Division);
-
-            if(str_contains($nomDiv,$nom) == true){
-                $chef_division =  User::findOrFail($div->Chef_division); 
-                $div->Chef_division = $chef_division ? $chef_division->nom." ".$chef_division->prenom : '';
-                $results[] = $div;
-            }
-        
+            $chef_division =  User::findOrFail($div->Chef_division); 
+            $div->Chef_division = $chef_division ? $chef_division->nom." ".$chef_division->prenom : '';
+            $results[] = $div;
         }
         
         return $results;

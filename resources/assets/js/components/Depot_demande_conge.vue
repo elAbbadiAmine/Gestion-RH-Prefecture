@@ -1,25 +1,25 @@
-<template>
+<template >
     <div class="container">
         <div class="row justify-content-center mt-5">
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">Demande de congé </div>
                     <form @submit.prevent=" create_demande()">
-
                         <div class="card-body">
                             <div class="form-group" >
-                                 <strong>Du:</strong>
-                            <input type="Date" name="date_debut" v-model="form.date_debut" id="date_debut" class="form-control" :class="{ 'is-invalid': form.errors.has('date_debut') }" style="width: 200px;">
-                            <has-error :form="form" field="Date_debut"></has-error>
-                             <strong>Au:</strong>
-                             <input type="Date" name="date_fin" v-model="form.date_fin" id="date_fin" class="form-control" :class="{ 'is-invalid': form.errors.has('date_fin') }" style="width: 200px;">
-                            <has-error :form="form" field="date_fin"></has-error>
-                        </div>
+                            <strong>Du:</strong>
+                                <input  type="Date" name="date_debut" v-model="form.date_debut" id="date_debut" class="form-control" :class="{ 'is-invalid': form.errors.has('date_debut') }" style="width: 200px;">
+                                <has-error :form="form" field="Date_debut"></has-error>
+                            <strong>Au:</strong>
+                                <input type="Date" name="date_fin" v-model="form.date_fin" id="date_fin" class="form-control" :class="{ 'is-invalid': form.errors.has('date_fin') }" style="width: 200px;">
+                                <has-error :form="form" field="date_fin"></has-error>
+                                </div>
                         <div>
                           <div class="form-group">
                                 <label>Type de congé : </label>
-                                <select class='form-control' v-model="form.type" @change="showCerti($event)" >
+                                <select class='form-control' v-model="form.type" @change="showCerti($event)" :class="{ 'is-invalid': form.errors.has('type') }" >
                                  <!--click to show-->
+                                    <option disabled selected value> -- Type -- </option>
                                     <option  value="Congé de Maladie">Congé de Maladie</option>
                                     <option  value="Congé de Maternité" >Congé de Maternité</option>
                                     <option  value="Congé Normal">Congé Normal</option>
@@ -57,6 +57,7 @@ import swal from 'sweetalert2';
         data() {
             return {             
                 active: false,
+                solde: null,
                 users: '',
                 form: new Form({
                     utilisateur : ''  , 
@@ -99,29 +100,42 @@ import swal from 'sweetalert2';
                 }    
             },
             create_demande(){
-                this.$Progress.start();
-                this.form.post('api/demande_conge').then(()=>{
-                    swal.fire(
-                        'Succès',
-                        'la demande a été bien crée',
-                        'succés'
-                        );
-                    Fire.$emit('AfterCreate');
-                this.form.reset();
-                this.$Progress.finish();
-                })
-                .catch(()=>{
-                    this.$Progress.fail();
-                });
-                this.form.reset();
-                this.form.clear();
-            },
-            postUser(){
+            /*
+                var date1 = new Date(document.getElementById('date_fin'));
+                var date2 = new Date(document.getElementById('date_debut'));
+                this.durée =  (date1 - date2 )/ (1000 * 3600 * 24) ;
+            
 
+                if(this.durée <= this.solde){*/
+                    this.$Progress.start();
+                    this.form.post('api/demande_conge').then(()=>{
+                        swal.fire(
+                            'Succès',
+                            'la demande a été bien crée',
+                            );
+                        Fire.$emit('AfterCreate');
+                    this.form.reset();
+                    this.$Progress.finish();
+                    })
+                    .catch(()=>{
+                        this.$Progress.fail();
+                    });
+                    this.form.reset();
+                    this.form.clear();
+                /*    
+                }else{
+                    swal.fire(
+                        'error',
+                        'sole < jours de congé',
+                    );
+                }
+                */
             }
             
         },
-        
+        created() {
+            //this.solde = document.querySelector("meta[name='user-id']").getAttribute('content');
+        }
     }
     
 </script>

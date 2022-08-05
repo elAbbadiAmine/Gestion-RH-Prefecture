@@ -4,11 +4,47 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Liste des demandes de congé</h3>
+                        <h3 class="card-title" style="margin-top: 5px;">Liste des demandes de congé </h3>
+                        <form class="card-tools" role="search" ref="#">
+                            <input v-model="keyword" @click="reset('search')" class="form-control me-2"  style="width: 280px; margin-right: 120px; margin-top: 5px;" type="search" placeholder="Rechercher par Utilisateur" aria-label="Search" id="shearchField">
+                        </form>
+ 
                         <div class="card-tools">
-                            <button class="btn btn-success"><i class="nav-icon fas fa-file-excel fa-fw"></i> Généré fichier excel </button>
+                            <button v-if="Object.keys(this.conges).length != 0 " class="btn btn-success" @click="exportExcel" style="margin-top: 5px;">Exporter <i class="fas fa-file-export fa-fw"></i></button>
+                            <button  v-else class="btn btn-success" style="background-color: lightgray; border-color: gray; margin-top: 5px;">Exporter <i class="fas fa-file-export fa-fw"></i></button>                      
                         </div>
                     </div>
+                <div class="navbar navbar-expand-lg bg-light">
+                    <div class="container-fluid">
+
+                <select  id="selectType" class='form-control '  style="width: 200px;" @focus="reset('type')" @change="getDemandesByType();" >
+                    <option disabled selected value> -- Type -- </option>
+                    <option  value="Congé de Maladie">Congé de Maladie</option>
+                    <option  value="Congé de Maternité" >Congé de Maternité</option>
+                    <option  value="Congé Normal">Congé Normal</option>
+                </select>
+
+                <span>|</span>
+
+                <label style="margin-top: 5px;">Du</label>
+                <div class="form-group">
+                    <input @click="reset('date_from')" type="Date" id="search_date_from" style="width: 160px; margin-top: 15px;"  class="form-control" :class="{ 'is-invalid': form.errors.has('Date_naissance') }">
+                    <has-error :form="form" ></has-error>
+                </div>
+                <label style="margin-top: 5px;">Au</label>
+                <div class="form-group">
+                    <input  type="Date" id="search_date_to" style="width: 160px; margin-top: 15px;"   class="form-control" :class="{ 'is-invalid': form.errors.has('Date_naissance') }">
+                    <has-error :form="form" ></has-error>
+                </div>
+                <button @click="getDemandesByDate()" class="btn btn-navbar" >
+                    <i class="fa fa-search"></i>
+                </button>
+                <span>|</span>
+                
+                <input class="btn btn-primary" style="width:100px;" type="reset" value="réinitialiser" @click="reset('all')">
+
+                    </div>
+                </div>
                     <!-- /.card-header -->
                     <div class="card-body table-responsive p-0">
                         <table class="table table-hover">
@@ -19,15 +55,16 @@
                                     <th>Date de début</th>
                                     <th>Date de fin</th>
                                     <th>Commentaire</th>
-                                    <th>Modifier</th>
+                                    <th>Outils</th>
                                 </tr>
                                 <tr v-for="conge in conges" :key="conge.utilisateur">
                                     <th>{{conge.utilisateur | capitalizeFirst}}</th>
                                     <th>{{conge.type}}</th>
                                     <th>{{conge.date_debut}}</th>
                                     <th>{{conge.date_fin}}</th>
-                                    <th>{{conge.Commentaire}}</th>
-                                    <td>
+                                    <th v-if="conge.Commentaire != null ">{{conge.Commentaire}}</th>
+                                    <th v-else> - </th>
+                                     <td>
                                     <a href="#" @click="viewDemande(conge) , calculateDurée(conge) , hideMenu()">
                                         <i class="fa fa-eye green"></i>
                                     </a>
@@ -165,7 +202,7 @@
                             
                             <div class="form-group col-md" style="margin-left: 80px;">
                                  <label >Solde (jour)</label>
-                                 <input disabled={!isEditMode}/ style="width: 80px" v-model="nbJours"  name="nbJours" class="form-control" > </input>
+                                 <input disabled={!isEditMode}/ style="width: 80px" v-model="nbJours"  name="nbJours" class="form-control" >
                             </div>
  
                             <div class="form-group col-md">
@@ -189,9 +226,11 @@
 
 <script>
 
-
+import { saveExcel } from '@progress/kendo-vue-excel-export';
+import { Grid } from '@progress/kendo-vue-grid';
 
 export default {
+    
             filters: {
                 capitalize: function (value) {
                 if (!value) return ''
@@ -210,6 +249,7 @@ export default {
                 etat3:null,
                 idConge : null,
 
+                keyword: null,
                 nbJours: null,
                 utilisateur: null,
                 elem : null,
@@ -227,7 +267,43 @@ export default {
             }
             
         },
+         watch: {
+            keyword(after, before) {
+                if(this.keyword == ""){
+                    Fire.$emit('AfterCreate');
+                }
+                this.getDemandesByName();
+            }
+        },
         methods: {
+            getDemandesByType(){
+                var type = document.getElementById("selectType").value;
+                axios.get("api/demande_conge/byType/"+type).then(({ data }) => (this.conges = data))
+            },
+            getDemandesByName(){
+                this.$Progress.start();
+                var nom = document.getElementById("shearchField").value;
+                axios.get("api/demande_conge/byName/"+nom).then(({ data }) => (this.conges = data));
+                this.$Progress.finish();
+            },
+            getDemandesByDate(){
+                var date_from = document.getElementById("search_date_from").value;
+                var date_to = document.getElementById("search_date_to").value;
+
+                this.$Progress.start();
+
+                axios.get('api/demande_conge/byDate/' + date_from + '/' + date_to).then(
+                    ({ data }) => (this.conges = data),
+                    this.$Progress.finish()
+                ).catch(() => {
+                    this.$Progress.fail(),
+                    swal.fire({
+                    title: 'ooops !',
+                    text: 'Veuillez choisir une date.',
+                    confirmButtonColor:'#d33',
+                    confirmButtonText: 'Ok'
+                })});
+            },
             telechargerCertificat(){
 
             },
@@ -270,16 +346,17 @@ export default {
             },
             traiterDemande(){
                 // ajouter congeEtat 3 ---> demande validee par l'admin'
+
                     let $idEtat = 3;
-                    axios.post("api/setCongeEtat/"+this.idConge+"/"+$idEtat).then(()=>{
-                    swal.fire(
-                        'Demande Validée !',
-                        'Votre Demande est Validée ',
-                        'Succès'
+                    axios.post("api/setCongeEtat/" + this.idConge + "/" + $idEtat).then(()=>{
+                        axios.post("api/setNewSolde/" + this.idConge + "/" + this.durée);
+                        swal.fire(
+                            'Demande Validée !',
+                            'Votre Demande est Validée ',
+                            'Succès'
                     )});
                     $('#TraitementDemnde').modal('hide');                          
             },
- 
             hideMenu(){
                 if(this.elem == null){
                     this.elem = document.getElementById('menu');
@@ -311,7 +388,39 @@ export default {
                          }
                     }).catch();
 
+            },
+            exportExcel(){
+                saveExcel({
+                data: this.conges,
+                fileName: "Demandes-de-congé",
+                columns: [
+                { field: 'utilisateur', title: 'utilisateur' },
+                { field: 'type', title: 'type' },
+                { field: 'date_debut', title: 'Date de début' },
+                { field: 'date_fin', title: 'Date de fin' },
+                { field: 'Commentaire', title: 'Commentaire' }
+
+              ]
+            });},
+            reset(valeur){
+
+                if(valeur != 'type' || valeur == 'all')
+                    $('#selectType').prop('selectedIndex',0);
+
+                if(valeur != 'search' || valeur == 'all')
+                    this.keyword="";   
+                    $('#shearchField').val('');
+
+                if(valeur != 'date_from' || valeur == 'all')
+                    $('#search_date_from').val('');
+
+                if(valeur != 'date_to' || valeur == 'all')
+                    $('#search_date_to').val('');
+                
+                Fire.$emit('AfterCreate');
+
             }
+
         },
         created() {
                 this.loadDemandeConge();

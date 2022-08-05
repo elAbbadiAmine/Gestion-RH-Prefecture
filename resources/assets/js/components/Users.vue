@@ -57,37 +57,36 @@
                 <table class="table table-hover">
                     <tbody>
                     <tr>
-                        <th>ID</th>
                         <th>Nom</th>
+                        <th>Prénom</th>
                         <th>Division</th>
                         <th>Email</th>
                         <th>Type</th>
-                        <th>Modifier à</th>
-                        <th>Modifier</th>
+                        <th>Recrutement</th>
+                        <th>Outils</th>
                     </tr>
 
-
                     <tr v-for="user in users" :key="user.id">
-
-                    <td>{{user.id}}</td>
                     <td>{{user.nom | capitalizeFirst }}</td>
+                    <td>{{user.prenom | capitalizeFirst }}</td>
                     <td>{{user.Division | capitalize }}</td>
                     <td>{{user.email}}</td>
                     <td>{{user.type | capitalizeFirst}}</td>
-                    <td>{{ moment(user.created_at).format("DD/MM/YYYY") }}</td>
+                    <td v-if="user.Date_recrutement">{{ moment(user.Date_recrutement).format("DD/MM/YYYY") }}</td>
+                    <td v-else>-</td>
 
                     <td>
-                        <a href="#" @click="viewUser(user)">
+                        <a href="#" @click="viewUser(user) , hideMenu()">
                             <i class="fa fa-eye green"></i>
                         </a>
                         
-                        <a v-if="user.type != 'admin'" href="#" @click="editModal(user)">
+                        <a v-if="user.type != 'admin'" href="#" @click="editModal(user) , hideMenu()">
                             /
                             <i class="fa fa-edit blue"></i>
                             /
                         </a>
                         
-                        <a v-if="user.type != 'admin'" href="#" @click="deleteUser(user.id)">
+                        <a v-if="user.type != 'admin'" href="#" @click="deleteUser(user.id) , hideMenu()">
                             <i class="fa fa-trash red"></i>
                         </a>
                     </td>
@@ -354,6 +353,7 @@ import { Grid } from '@progress/kendo-vue-grid';
             return {  
                 moment: moment, 
                 keyword: null,
+                elem : null,
                 editmode: false,
                 users : {},
                 divisions : {},
@@ -387,6 +387,12 @@ import { Grid } from '@progress/kendo-vue-grid';
             }
         },
         methods: {
+            hideMenu(){
+                if(this.elem == null){
+                    this.elem = document.getElementById('menu');
+                    this.elem.click();
+                }
+            },
             updateUser(){
                 this.$Progress.start();
                 this.form.put('api/user/'+this.form.id)
@@ -405,7 +411,6 @@ import { Grid } from '@progress/kendo-vue-grid';
                 });
 
             },
-            
             editModal(user){
                 this.editmode = true;
                 this.form.clear();

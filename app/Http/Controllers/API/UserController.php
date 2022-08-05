@@ -6,11 +6,13 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
 use App\Division;
+use App\Demande_Conge;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use App\Exports\UserExport;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -300,70 +302,79 @@ class UserController extends Controller
 
     public function getUsersByType($type)
     {
-        $users = User::latest()->paginate(20);
-        $results=[];
+        $users = DB::table('users')->where([
+            ['type', '=', $type]
+        ])->get();
+
+        $resultas=[];
         
         foreach($users as $user){
-            $userType = $user -> type;
-            if($userType == $type){
-                if($user -> Division){
-                    $division = Division::findOrFail($user -> Division);
-                    $user -> Division =$division-> Division;
-                }else{
-                    $user -> Division ='-';
-                }
-                $results[] = $user;
+
+            if($user -> Division){
+                $division = Division::findOrFail($user -> Division);
+                $user -> Division =$division-> Division;
+            }else{
+                $user -> Division ='-';
             }
+
+            $resultas[] = $user;
         }
+        return $resultas;
         
-        return $results;
     }
 
     public function getUsersByName($nom){
-        $users = User::latest()->paginate(20);
-        $results=[];
-        $nom = strtolower($nom);
+
+        $users = DB::table('users')->where('nom', 'like', '%' . $nom . '%')->orWhere('prenom', 'like', '%' . $nom . '%')->get(); 
+
+        $resultas=[];
 
         foreach($users as $user){      
-            $nomUser = strtolower($user -> nom);
-
-            if(str_contains($nomUser,$nom) == true){
                 if($user -> Division){
                     $division = Division::findOrFail($user -> Division);
                     $user -> Division =$division-> Division;
                 }else{
                     $user -> Division ='-';
                 }
-                $results[] = $user;
+                $resultas[] = $user;
             }
         
-        }
-        
-        return $results;
+        return $resultas;
     }
 
     
     public function getUsersByDate($dateFrom,$dateTo){
-        
-        $users = User::latest()->paginate(20);
-        $results=[];
-        if($dateTo == null){$dateTo=$dateFrom;}
-        foreach($users as $user){      
 
-            if(($user -> created_at) >= $dateFrom && ($user -> created_at) <= $dateTo){
+        $users = DB::table('users')->where('date_recrutement', '>=', $dateFrom)->where('date_recrutement', '<=', $dateTo)->get();
+
+        $resultas=[];
+
+        foreach($users as $user){      
                 if($user -> Division){
                     $division = Division::findOrFail($user -> Division);
                     $user -> Division =$division-> Division;
                 }else{
                     $user -> Division ='-';
                 }
-                $results[] = $user;
-            }
-        
+                $resultas[] = $user;
         }
         
-        return $results;
+        return $resultas;
     }
     
-   
+    
+    public function setSolde(int $idConge, int $nbJours){
+
+
+        $conge = Demande_Conge::findOrFail($idConge);
+
+        $id = $conge->utilisateur;
+
+        $user = User::findOrFail($id);
+
+        $user->solde = $user->solde - $nbJours;
+
+        $user->save();
+    }
+
 }

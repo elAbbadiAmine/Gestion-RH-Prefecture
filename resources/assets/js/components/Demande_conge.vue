@@ -20,6 +20,7 @@
                                     <th>Date de début</th>
                                     <th>Date de fin</th>
                                     <th>Commentaire</th>
+                                    <th>Outils</th>
                                 </tr>
                                 <tr v-for="conge in conges" :key="conge.utilisateur">
                                     <th>{{conge.type}}</th>
@@ -105,7 +106,7 @@
                             
                             <div class="form-group col-md" style="margin-left: 80px;">
                                  <label >Solde (jour)</label>
-                                 <input disabled={!isEditMode}/ style="width: 80px" v-model="nbJours"  name="nbJours" class="form-control" > </input>
+                                 <input disabled={!isEditMode}/ style="width: 80px" v-model="nbJours"  name="nbJours" class="form-control" > 
                             </div>
  
                             <div class="form-group col-md">
@@ -118,6 +119,7 @@
                   </div>
               </div> 
               <div class="modal-footer">
+                    <button v-if="this.etat3 != null" @click="telechargerDemande()"  type="button" class="btn btn-success" data-dismiss="modal">Télécharger la demande</button>
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
               </div>
             </div>
@@ -127,6 +129,7 @@
 </template>
 
 <script>
+import swal from 'sweetalert2';
 import { saveExcel } from '@progress/kendo-vue-excel-export';
 import { Grid } from '@progress/kendo-vue-grid';
 
@@ -169,6 +172,9 @@ export default {
             
         },
         methods: {
+            telechargerDemande(){
+
+            },
             loadDemandeConge(){
                 axios.get("api/loadDemandeConge/").then(({ data }) => (this.conges=data.data))
             },

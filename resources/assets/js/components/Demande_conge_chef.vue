@@ -19,6 +19,7 @@
                                     <th>Date de début</th>
                                     <th>Date de fin</th>
                                     <th>Commentaire</th>
+                                    <th>Outils</th>
                                 </tr>
                                 <tr v-for="conge in conges" :key="conge.utilisateur">
                                     <th>{{conge.utilisateur}}</th>
@@ -166,7 +167,7 @@
                                 
                                 <div class="form-group col-md" style="margin-left: 80px;">
                                     <label >Solde (jour)</label>
-                                    <input disabled={!isEditMode}/ style="width: 80px" v-model="nbJours"  name="nbJours" class="form-control" > </input>
+                                    <input disabled={!isEditMode}/ style="width: 80px" v-model="nbJours"  name="nbJours" class="form-control" >
                                 </div>
     
                                 <div class="form-group col-md">

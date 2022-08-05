@@ -93,6 +93,31 @@ scratch. This page gets rid of all links and provides the needed markup only.
           </li>
           @endcan
 
+          @can('isAdmin')
+          <li class="nav-item has-treeview">
+          <a href="#" class="nav-link">
+          <i class="nav-icon fa fa-list" style="color:lightseagreen"></i>
+            <p>
+              Mes Demandes
+              <i class="right fa fa-angle-left"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <router-link to="/Demande_conge" class="nav-link">
+              <i class="fa-solid fa-calendar-days fa-fw" style="margin-left: 15px"></i>
+                <p>Congé</p>
+              </router-link>
+              <router-link to="/Demande_document_RH" class="nav-link" >
+              <i class="fa-solid fa-file fa-fw" style="margin-left: 15px"></i>
+                <p>Document RH</p>
+              </router-link>
+            </li>
+          </ul>
+        </li>
+        @endcan
+
+
          <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fa fa-file-circle-check" style="color:lightskyblue"></i>

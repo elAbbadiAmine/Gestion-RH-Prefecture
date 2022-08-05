@@ -10,6 +10,8 @@ use App\Demande_Conge;
 use App\Demande_rh;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
 
 class DemandeRhController extends Controller
 {
@@ -95,6 +97,56 @@ class DemandeRhController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $rh = Demande_RH::findOrFail($id);
+        $rh->delete();
+        
+
+        return ['message' => 'rh Deleted'];
+
+    }
+
+    public function getByName($nom){
+
+        $rhs = Demande_RH::latest()->paginate(20);
+        $results = [];
+        $nom = strtolower($nom);
+
+        foreach($rhs as $rh){     
+            $utilisateur =  User::findOrFail($rh -> utilisateur); 
+            if(str_contains(strtolower($utilisateur->nom),$nom) == true || str_contains(strtolower($utilisateur->prenom),$nom) == true ){
+                $rh -> utilisateur = $utilisateur ? $utilisateur->nom." ".$utilisateur->prenom : '';
+                $results[] = $rh;
+            }
+    
+        }
+       
+        return $results;
+    }
+    
+    public function getByType($type){
+        $rhs = DB::table('demanderh')->where([
+            ['type', '=', $type]
+        ])->get();
+        
+        foreach($rhs as $rh){     
+            $utilisateur =  User::findOrFail($rh -> utilisateur); 
+            $rh -> utilisateur = $utilisateur ? $utilisateur->nom." ".$utilisateur->prenom : '';    
+        }
+        
+        return $rhs;
+    }
+
+    public function getByLangue($langue){
+
+        $rhs = DB::table('demanderh')->where([
+            ['langue', '=', $langue]
+        ])->get();
+        
+        foreach($rhs as $rh){     
+            $utilisateur =  User::findOrFail($rh -> utilisateur); 
+            $rh -> utilisateur = $utilisateur ? $utilisateur->nom." ".$utilisateur->prenom : '';    
+        }
+        
+        return $rhs;
     }
 }

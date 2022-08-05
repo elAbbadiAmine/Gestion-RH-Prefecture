@@ -18,7 +18,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+
 Route::delete('demande_conge/{id}','API\DemandeCongeController@destroy');
+
+Route::delete('demande_rh/{id}','API\DemandeRhController@destroy');
 
 
 
@@ -43,6 +46,7 @@ Route::get('ServDivision','API\ServController@ServDivision');
 
 
 Route::get('division/getByName/{nom}','API\DivisionController@getDivsByName');
+
 
 
 Route::get('getByDate/{dateFrom}/{dateTo}','API\UserController@getUsersByDate');
@@ -80,10 +84,27 @@ Route::get('loadDemandeRh','API\DemandeRhController@index');
 
 Route::get('loadDemandeRhChef','API\DemandeRhChefController@index');
 
+///
+Route::get('demande_conge/byName/{nom}','API\DemandeCongeController@getByName');
+Route::get('demande_conge/byType/{type}','API\DemandeCongeController@getByType');
+Route::get('demande_conge/byDate/{dateFrom}/{dateTo}','API\DemandeCongeController@getByDate');
+
+Route::get('demande_rh/byName/{nom}','API\DemandeRhController@getByName');
+Route::get('demande_rh/byType/{type}','API\DemandeRhController@getByType');
+Route::get('demande_rh/byLangue/{langue}','API\DemandeRhController@getByLangue');
+
+///
+
+
 
 
 // les etat
 Route::get('getCongeEtat/{idConge}','API\DemandeCongeController@getEtat');
-
-
 Route::post('setCongeEtat/{idConge}/{idEtat}','API\DemandeCongeController@setEtat');
+
+
+
+
+
+// modifier le solde 
+Route::post('setNewSolde/{idConge}/{nbJours}','API\UserController@setSolde');

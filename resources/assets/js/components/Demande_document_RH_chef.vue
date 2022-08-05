@@ -18,6 +18,7 @@
                                     <th>Type</th>
                                     <th>Langue</th>
                                     <th>Commentaire</th>
+                                    <th>Outils</th>
                                 </tr>
                                 <tr v-for="rh in demanderh" :key="rh.utilisateur">
                                     <th>{{rh.utilisateur}}</th>

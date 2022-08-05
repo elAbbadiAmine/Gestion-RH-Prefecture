@@ -27,7 +27,7 @@
                                     <th>Service</th>
                                     <th>Chef de service</th>
                                     <th>Enregistré à</th>
-                                    <th>Modifier</th>
+                                    <th>Outils</th>
                                 </tr>
                                 <tr v-for="service in services" :key="service.id">
                                     <td>{{service.service}}</td>

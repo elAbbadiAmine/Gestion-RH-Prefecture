@@ -14,7 +14,7 @@
                     <div class="navbar navbar-expand-lg bg-light">
                         <div style="margin-left: -420px;" class="container-fluid">
                             <form class="card-tools" role="search" >
-                                <input v-model="keyword" class="form-control me-2"  style="width: 315px; margin-left: 600px;" type="search" placeholder="Rechercher par Nom" aria-label="Search" id="shearchField">
+                                <input v-model="keyword" class="form-control me-2"  style="width: 315px; margin-left: 600px;" type="search" placeholder="Rechercher par Division" aria-label="Search" id="shearchField">
                             </form>
                             <input class="btn btn-primary" style="width:100px; margin-left:19px ;" type="reset" value="réinitialiser" @click="reset()">
                         </div>
@@ -29,7 +29,7 @@
                                     <th>Nom Division</th>
                                     <th>Chef de division</th>
                                     <th>Enregistré à</th>
-                                    <th>Modifier</th>
+                                    <th>Outils</th>
                                 </tr>
                                 <tr v-for="div in divisions" :key="div.id">
                                     <td>{{div.Division | capitalize }}</td>
@@ -172,7 +172,7 @@ export default {
             loadDivisions(){
                 axios.get("api/division").then(({ data }) => (this.divisions = data.data))
             },
-             UserDivisions(){
+            UserDivisions(){
                 axios.get("api/UserDivisions").then(({ data }) => (this.users=data.data))
             },
             editModal(division){

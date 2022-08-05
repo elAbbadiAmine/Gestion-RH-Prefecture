@@ -27,7 +27,13 @@ class DemandeCongeController extends Controller
     }
     public function index()
     {
-        return Demande_Conge::latest()->where('utilisateur',Auth::id())->paginate(20);
+        $conges = Demande_Conge::latest()->where('utilisateur',Auth::id())->paginate(20);
+        
+        foreach($conges as $conge){
+            $users = User::findOrFail($conge->utilisateur);
+            $conge -> utilisateur = $users ? $users->nom." ".$users->prenom : '';
+        }
+        return $conges;
     }
     /**
      * Show the form for creating a new resource.
@@ -48,6 +54,19 @@ class DemandeCongeController extends Controller
     public function store(Request $request)
     {
 
+        $this->validate($request,[
+            'date_debut' => 'required',
+            'date_fin' => 'required',
+            'type' => 'required'
+        ],
+        [
+            'type.required' => 'Le Type est obligatoire.',
+            'date_debut.required' => 'La date de Début  nom est obligatoire.',
+            'date_fin.required' => 'La date de Fin est obligatoire.'
+       
+        ]);
+
+
         // ajouter la demande de congé
         $demandeCongé = new Demande_Conge();
         $demandeCongé -> utilisateur = Auth::id();
@@ -60,13 +79,36 @@ class DemandeCongeController extends Controller
 
 
 
-        // ajouter congéEtat
+        // ajouter congéEtat nº 1
         $Conge_etat = new CongeEtat();
         $Conge_etat->id_conge = $demandeCongé->id;
-        //$intitulé = 'Nouvelle demande';
-        //$etat = Etat::findOrFail($intitulé);
-        $Conge_etat->id_etat = 1;//$etat->id_etat ;
+        $Conge_etat->id_etat = 1;
         $Conge_etat->save();
+
+
+        // si l'utilisateur est Admin
+
+        if(Auth::user()->type == "admin"){
+
+            $Conge_etat = new CongeEtat();
+            $Conge_etat->id_conge = $demandeCongé->id;
+            $Conge_etat->id_etat = 2;
+            $Conge_etat->save();
+
+            $Conge_etat = new CongeEtat();
+            $Conge_etat->id_conge = $demandeCongé->id;
+            $Conge_etat->id_etat = 3;
+            $Conge_etat->save();
+        }
+
+        if(Auth::user()->type == "Chef de division"){
+
+            $Conge_etat = new CongeEtat();
+            $Conge_etat->id_conge = $demandeCongé->id;
+            $Conge_etat->id_etat = 2;
+            $Conge_etat->save();
+
+        }
         
     }
 
@@ -130,8 +172,6 @@ class DemandeCongeController extends Controller
         return ['data' =>  $user->solde];
     }
 
-
-
     public  function getEtat( int $idConge )
     {
         $CongeEtat1 = null;
@@ -172,7 +212,47 @@ class DemandeCongeController extends Controller
 
     }
 
+    public function getByName($nom){
 
+        $conges = Demande_Conge::latest()->paginate(20);
+        $results = [];
+        $nom = strtolower($nom);
+
+        foreach($conges as $conge){     
+            $utilisateur =  User::findOrFail($conge -> utilisateur); 
+            if(str_contains(strtolower($utilisateur->nom),$nom) == true || str_contains(strtolower($utilisateur->prenom),$nom) == true ){
+                $conge -> utilisateur = $utilisateur ? $utilisateur->nom." ".$utilisateur->prenom : '';
+                $results[] = $conge;
+            }
+    
+        }
+       
+        return $results;
+    }
+    
+    public function getByType($type){
+        $conges = DB::table('conges')->where([
+            ['type', '=', $type]
+        ])->get();
+        
+        foreach($conges as $conge){     
+            $utilisateur =  User::findOrFail($conge -> utilisateur); 
+            $conge -> utilisateur = $utilisateur ? $utilisateur->nom." ".$utilisateur->prenom : '';    
+        }
+        
+        return $conges;
+    }
+
+    public function getByDate($dateFrom,$dateTo){
+        $conges = DB::table('conges')->where('date_debut', '>=', $dateFrom)->where('date_fin', '<=', $dateTo)->get();
+        
+        foreach($conges as $conge){     
+            $utilisateur =  User::findOrFail($conge -> utilisateur); 
+            $conge -> utilisateur = $utilisateur ? $utilisateur->nom." ".$utilisateur->prenom : '';    
+        }
+        
+        return $conges;
+    }
 
 
 }
