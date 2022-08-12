@@ -6,18 +6,18 @@
                     <div class="card-header">
                         <h3 class="card-title" style="margin-top: 5px;">Liste des demandes de congé </h3>
                         <form class="card-tools" role="search" ref="#">
-                            <input v-model="keyword" @click="reset('search')" class="form-control me-2"  style="width: 280px; margin-right: 120px; margin-top: 5px;" type="search" placeholder="Rechercher par Utilisateur" aria-label="Search" id="shearchField">
+                            <input v-model="keyword" @click="reset('search')" class="form-control me-2"  style="width: 280px; margin-right: 150px; margin-top: 5px;" type="search" placeholder="Rechercher par Utilisateur" aria-label="Search" id="shearchField">
                         </form>
  
                         <div class="card-tools">
-                            <button v-if="Object.keys(this.conges).length != 0 " class="btn btn-success" @click="exportExcel" style="margin-top: 5px;">Exporter <i class="fas fa-file-export fa-fw"></i></button>
-                            <button  v-else class="btn btn-success" style="background-color: lightgray; border-color: gray; margin-top: 5px;">Exporter <i class="fas fa-file-export fa-fw"></i></button>                      
+                            <button v-if="Object.keys(this.conges).length != 0 " class="btn btn-success" @click="exportExcel" style="margin-top: 5px;margin-right: 15px;">Exporter <i class="fas fa-file-export fa-fw"></i></button>
+                            <button  v-else class="btn btn-success" style="background-color: lightgray; border-color: gray; margin-top: 5px;margin-right: 15px;">Exporter <i class="fas fa-file-export fa-fw"></i></button>                      
                         </div>
                     </div>
                 <div class="navbar navbar-expand-lg bg-light">
                     <div class="container-fluid">
 
-                <select  id="selectType" class='form-control '  style="width: 200px;" @focus="reset('type')" @change="getDemandesByType();" >
+                <select  id="selectType" class='form-control'  style="width: 200px;" @focus="reset('type')" @change="getDemandesByType();" >
                     <option disabled selected value> -- Type -- </option>
                     <option  value="Congé de Maladie">Congé de Maladie</option>
                     <option  value="Congé de Maternité" >Congé de Maternité</option>
@@ -43,7 +43,7 @@
                 
                 <input class="btn btn-primary" style="width:100px;" type="reset" value="réinitialiser" @click="reset('all')">
 
-                    </div>
+            </div>
                 </div>
                     <!-- /.card-header -->
                     <div class="card-body table-responsive p-0">
@@ -64,7 +64,7 @@
                                     <th>{{conge.date_fin}}</th>
                                     <th v-if="conge.Commentaire != null ">{{conge.Commentaire}}</th>
                                     <th v-else> - </th>
-                                     <td>
+                                     <th>
                                     <a href="#" @click="viewDemande(conge) , calculateDurée(conge) , hideMenu()">
                                         <i class="fa fa-eye green"></i>
                                     </a>
@@ -76,7 +76,7 @@
                                     <a href="#" @click="deleteDemande(conge.id)">
                                         <i class="fa fa-trash red"></i>
                                     </a>
-                                    </td>
+                                    </th>
                                 </tr>
                             </tbody>
                         </table>
@@ -267,7 +267,7 @@ export default {
             }
             
         },
-         watch: {
+        watch: {
             keyword(after, before) {
                 if(this.keyword == ""){
                     Fire.$emit('AfterCreate');
@@ -278,12 +278,12 @@ export default {
         methods: {
             getDemandesByType(){
                 var type = document.getElementById("selectType").value;
-                axios.get("api/demande_conge/byType/"+type).then(({ data }) => (this.conges = data))
+                axios.get("api/listeDemandes/demande_conge/byType/"+type).then(({ data }) => (this.conges = data))
             },
             getDemandesByName(){
                 this.$Progress.start();
                 var nom = document.getElementById("shearchField").value;
-                axios.get("api/demande_conge/byName/"+nom).then(({ data }) => (this.conges = data));
+                axios.get("api/listeDemandes/demande_conge/byName/"+nom).then(({ data }) => (this.conges = data));
                 this.$Progress.finish();
             },
             getDemandesByDate(){
@@ -292,7 +292,7 @@ export default {
 
                 this.$Progress.start();
 
-                axios.get('api/demande_conge/byDate/' + date_from + '/' + date_to).then(
+                axios.get('api/listeDemandes/demande_conge/byDate/' + date_from + '/' + date_to).then(
                     ({ data }) => (this.conges = data),
                     this.$Progress.finish()
                 ).catch(() => {

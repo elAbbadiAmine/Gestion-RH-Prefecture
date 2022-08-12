@@ -9,6 +9,7 @@ use App\Division;
 use App\Demande_Conge;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class DemandeCongeAllController extends Controller
 {
@@ -92,4 +93,47 @@ class DemandeCongeAllController extends Controller
     {
         //
     }
+
+    public function getByName($nom){
+
+        $conges = Demande_Conge::latest()->paginate(20);
+        $results = [];
+        $nom = strtolower($nom);
+
+        foreach($conges as $conge){     
+            $utilisateur =  User::findOrFail($conge -> utilisateur); 
+            if(str_contains(strtolower($utilisateur->nom),$nom) == true || str_contains(strtolower($utilisateur->prenom),$nom) == true ){
+                $conge -> utilisateur = $utilisateur ? $utilisateur->nom." ".$utilisateur->prenom : '';
+                $results[] = $conge;
+            }
+    
+        }
+       
+        return $results;
+    }
+    
+    public function getByType($type){
+
+        $conges = DB::table('conges')->where('type', '=', $type)->get(); 
+        
+        foreach($conges as $conge){     
+            $utilisateur =  User::findOrFail($conge -> utilisateur); 
+            $conge -> utilisateur = $utilisateur ? $utilisateur->nom." ".$utilisateur->prenom : '';    
+        }
+        
+        return $conges;
+    }
+
+    public function getByDate($dateFrom,$dateTo){
+
+        $conges = DB::table('conges')->where('date_debut', '>=', $dateFrom)->where('date_fin', '<=', $dateTo)->get();
+
+        foreach($conges as $conge){     
+            $utilisateur =  User::findOrFail($conge -> utilisateur); 
+            $conge -> utilisateur = $utilisateur ? $utilisateur->nom." ".$utilisateur->prenom : '';    
+        }
+        
+        return $conges;
+    }
+
 }

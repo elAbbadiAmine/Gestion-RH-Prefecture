@@ -14,6 +14,7 @@
                     <button :disabled="isDisabled"   v-else class="btn btn-success" style="margin-top: 8px; background-color: lightgray; border-color: gray;">Exporter <i class="fas fa-file-export fa-fw"></i></button>
                 </div>
                 </div>
+                
                 <div class="navbar navbar-expand-lg bg-light">
                     <div class="container-fluid">
 

@@ -4,13 +4,43 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title" style="margin-top: 10px;">Mes demandes de congé </h3>
+                        <h3 class="card-title" style="margin-top: 10px;">Mes demandes de congés</h3>
                         <div class="card-tools">
-                            <button  v-if="Object.keys(this.conges).length != 0 "  class="btn btn-success" @click="exportExcel" style="margin-top: 8px;">Exporter <i class="fas fa-file-export fa-fw"></i></button>
-                            <button :disabled="isDisabled"   v-else class="btn btn-success" style="margin-top: 8px; background-color: lightgray; border-color: gray;">Exporter <i class="fas fa-file-export fa-fw"></i></button>
+                            <button  v-if="Object.keys(this.conges).length != 0 "  class="btn btn-success" @click="exportExcel" style="margin-top: 8px; margin-right: 13px;">Exporter <i class="fas fa-file-export fa-fw"></i></button>
+                            <button :disabled="isDisabled"   v-else class="btn btn-success" style="margin-top: 8px; background-color: lightgray; border-color: gray; margin-right: 13px;">Exporter <i class="fas fa-file-export fa-fw"></i></button>
                   
                         </div>
                     </div>
+
+                <div class="navbar navbar-expand-lg bg-light">
+                    <div class="container-fluid">
+                        <select  id="selectType" class='form-control '  style="width: 200px;" @focus="reset('type')" @change="getDemandesByType();" >
+                            <option disabled selected value> -- Type -- </option>
+                            <option  value="Congé de Maladie">Congé de Maladie</option>
+                            <option  value="Congé de Maternité" >Congé de Maternité</option>
+                            <option  value="Congé Normal">Congé Normal</option>
+                        </select>
+                        <span>|</span>
+                        <label style="margin-top: 5px;">Du</label>
+                        <div class="form-group">
+                            <input @click="reset('date_from')" type="Date" id="search_date_from" style="width: 160px; margin-top: 15px;"  class="form-control" :class="{ 'is-invalid': form.errors.has('Date_naissance') }">
+                            <has-error :form="form" ></has-error>
+                        </div>
+                        <label style="margin-top: 5px;">Au</label>
+                        <div class="form-group">
+                            <input  type="Date" id="search_date_to" style="width: 160px; margin-top: 15px;"   class="form-control" :class="{ 'is-invalid': form.errors.has('Date_naissance') }">
+                            <has-error :form="form" ></has-error>
+                        </div>
+                        <button @click="getDemandesByDate()" class="btn btn-navbar" >
+                            <i class="fa fa-search"></i>
+                        </button>
+                        <span>|</span>
+                        
+                        <input class="btn btn-primary" style="width:100px;" type="reset" value="réinitialiser" @click="reset('all')">
+
+                    </div>
+                </div>
+
                     <!-- /.card-header -->
                     <div class="card-body table-responsive p-0">
                         <table class="table table-hover">
@@ -31,9 +61,11 @@
                                     <td>
                                     <a href="#" @click="etatDemande(conge) , calculateDurée(conge) , hideMenu()">
                                         <i class="fa fa-circle-check blue"></i>
+                                        
                                     </a>
+                                    
+                                    <a v-if="isOKtoDelete(conge.id) == null" href="#" @click="deleteDemande(conge.id)">
                                     /
-                                    <a href="#" @click="deleteDemande(conge.id)">
                                         <i class="fa fa-trash red"></i>
                                     </a>
                                     </td>
@@ -41,6 +73,7 @@
                             </tbody>
                         </table>
                     </div>
+                    
                 </div>
             </div>
         </div>
@@ -254,6 +287,56 @@ export default {
                 var date2 = new Date(conge.date_debut);
                 this.durée =  (date1 - date2 )/ (1000 * 3600 * 24) ;
             },
+            reset(valeur){
+
+                if(valeur != 'type' || valeur == 'all')
+                    $('#selectType').prop('selectedIndex',0);
+
+                if(valeur != 'search' || valeur == 'all')
+                    this.keyword="";   
+                    $('#shearchField').val('');
+
+                if(valeur != 'date_from' || valeur == 'all')
+                    $('#search_date_from').val('');
+
+                if(valeur != 'date_to' || valeur == 'all')
+                    $('#search_date_to').val('');
+                
+                Fire.$emit('AfterCreate');
+
+            },
+            getDemandesByType(){
+                var type = document.getElementById("selectType").value;
+                axios.get("api/mesDemandes/demande_conge/byType/"+type).then(({ data }) => (this.conges = data))
+            },
+            getDemandesByDate(){
+                var date_from = document.getElementById("search_date_from").value;
+                var date_to = document.getElementById("search_date_to").value;
+
+                this.$Progress.start();
+
+                axios.get('api/mesDemandes/demande_conge/byDate/' + date_from + '/' + date_to).then(
+                    ({ data }) => (this.conges = data),
+                    this.$Progress.finish()
+                ).catch(() => {
+                    this.$Progress.fail(),
+                    swal.fire({
+                    title: 'ooops !',
+                    text: 'Veuillez choisir une date.',
+                    confirmButtonColor:'#d33',
+                    confirmButtonText: 'Ok'
+                })});
+            },
+            isOKtoDelete(id){
+                let etat2 = null;
+
+                axios.get("api/getCongeEtat/"+id).then(({ data }) => (
+                        etat2 = data.CongeEtat2[0]
+                ));
+
+                return etat2;
+            }
+  
         },
         created() {
                 this.loadDemandeConge();

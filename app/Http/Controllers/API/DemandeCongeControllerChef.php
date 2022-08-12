@@ -106,4 +106,65 @@ class DemandeCongeControllerChef extends Controller
     {
         //
     }
+
+
+    public function getByName($nom){
+
+        $div = Division::where('Chef_division',Auth::id())->get();
+        $loadusers = DB::table('users')->select('id')->where([
+            ['Division', $div[0]->id]
+        ])->where('nom', 'like', '%' . $nom . '%')->orWhere('prenom', 'like', '%' . $nom . '%')->get();
+        
+        $idUsers=[];
+
+        foreach($loadusers as $loaduser){
+            $idUsers[]=$loaduser->id;
+        }
+
+        $conges = DB::table('conges')->WhereIn('utilisateur',$idUsers)->get();
+
+        foreach($conges as $conge){
+            $users = User::findOrFail($conge->utilisateur);
+            $conge -> utilisateur = $users ? $users->nom." ".$users->prenom : '';
+        }
+        return $conges;
+    }
+    
+    public function getByType($type){
+
+        $div = Division::where('Chef_division',Auth::id())->get();
+        $loadusers = DB::table('users')->select('id')->where('Division',$div[0]->id)->get();
+        $idUsers=[];
+        foreach($loadusers as $loaduser){
+            $idUsers[]=$loaduser->id;
+        }
+        $conges = DB::table('conges')->WhereIn('utilisateur',$idUsers)->where('type', '=', $type)->get(); 
+        
+        foreach($conges as $conge){     
+            $utilisateur =  User::findOrFail($conge -> utilisateur); 
+            $conge -> utilisateur = $utilisateur ? $utilisateur->nom." ".$utilisateur->prenom : '';    
+        }
+        
+        return $conges;
+    }
+
+    public function getByDate($dateFrom,$dateTo){
+
+        $div = Division::where('Chef_division',Auth::id())->get();
+        $loadusers = DB::table('users')->select('id')->where('Division',$div[0]->id)->get();
+        $idUsers=[];
+
+        foreach($loadusers as $loaduser){
+            $idUsers[]=$loaduser->id;
+        }
+
+        $conges = DB::table('conges')->WhereIn('utilisateur',$idUsers)->where('date_debut', '>=', $dateFrom)->where('date_fin', '<=', $dateTo)->get();
+
+        foreach($conges as $conge){     
+            $utilisateur =  User::findOrFail($conge -> utilisateur); 
+            $conge -> utilisateur = $utilisateur ? $utilisateur->nom." ".$utilisateur->prenom : '';    
+        }
+        
+        return $conges;
+    }
 }

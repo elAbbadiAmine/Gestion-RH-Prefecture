@@ -50,6 +50,7 @@
 </template>
    
 <script>
+import { equal } from 'assert';
 import { exit } from 'process';
 import swal from 'sweetalert2';
 
@@ -57,7 +58,8 @@ import swal from 'sweetalert2';
         data() {
             return {             
                 active: false,
-                solde: null,
+                monSolde: 0,
+                durée: 0,
                 users: '',
                 form: new Form({
                     utilisateur : ''  , 
@@ -100,13 +102,13 @@ import swal from 'sweetalert2';
                 }    
             },
             create_demande(){
-            /*
-                var date1 = new Date(document.getElementById('date_fin'));
-                var date2 = new Date(document.getElementById('date_debut'));
-                this.durée =  (date1 - date2 )/ (1000 * 3600 * 24) ;
             
+                var date1 = new Date(document.getElementById('date_fin').value);
+                var date2 = new Date(document.getElementById('date_debut').value);
+                this.durée =  (date1 - date2 )/ (1000 * 3600 * 24) ;
 
-                if(this.durée <= this.solde){*/
+
+                if(+this.monSolde >= +this.durée){
                     this.$Progress.start();
                     this.form.post('api/demande_conge').then(()=>{
                         swal.fire(
@@ -122,19 +124,24 @@ import swal from 'sweetalert2';
                     });
                     this.form.reset();
                     this.form.clear();
-                /*    
+                    
                 }else{
-                    swal.fire(
-                        'error',
-                        'sole < jours de congé',
-                    );
-                }
-                */
+                    swal.fire({
+                    title: 'ooops !',
+                    text: 'Veuillez choisir une durée inférieure à ' + this.monSolde +' jour(s)',
+                    confirmButtonColor:'#d33',
+                    confirmButtonText: 'Ok'
+                });}
+                
+            
+            },
+            loadSolde(){
+                axios.get("api/getSolde").then(({ data }) => (this.monSolde = data));
             }
             
         },
         created() {
-            //this.solde = document.querySelector("meta[name='user-id']").getAttribute('content');
+            this.loadSolde();
         }
     }
     

@@ -4,9 +4,45 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Liste des demandes de congé </h3>
+                        <h3 class="card-title">Liste des demandes de congé</h3>
+                        <form class="card-tools" role="search" ref="#">
+                            <input v-model="keyword" @click="reset('search')" class="form-control me-2"  style="width: 280px; margin-right: 150px; margin-top: 5px;" type="search" placeholder="Rechercher par Utilisateur" aria-label="Search" id="shearchField">
+                        </form>
+ 
                         <div class="card-tools">
-                            <button class="btn btn-success"><i class="nav-icon fas fa-file-excel fa-fw"></i> Généré fichier excel </button>
+                            <button v-if="Object.keys(this.conges).length != 0 " class="btn btn-success" @click="exportExcel" style="margin-top: 5px;margin-right: 15px;">Exporter <i class="fas fa-file-export fa-fw"></i></button>
+                            <button  v-else class="btn btn-success" style="background-color: lightgray; border-color: gray; margin-top: 5px;margin-right: 15px;">Exporter <i class="fas fa-file-export fa-fw"></i></button>                      
+                        </div>
+                    </div>
+                    <div class="navbar navbar-expand-lg bg-light">
+                        <div class="container-fluid">
+
+                            <select  id="selectType" class='form-control'  style="width: 200px;" @focus="reset('type')" @change="getDemandesByType();" >
+                                <option disabled selected value> -- Type -- </option>
+                                <option  value="Congé de Maladie">Congé de Maladie</option>
+                                <option  value="Congé de Maternité" >Congé de Maternité</option>
+                                <option  value="Congé Normal">Congé Normal</option>
+                            </select>
+
+                            <span>|</span>
+
+                            <label style="margin-top: 5px;">Du</label>
+                            <div class="form-group">
+                                <input @click="reset('date_from')" type="Date" id="search_date_from" style="width: 160px; margin-top: 15px;"  class="form-control" :class="{ 'is-invalid': form.errors.has('Date_naissance') }">
+                                <has-error :form="form" ></has-error>
+                            </div>
+                            <label style="margin-top: 5px;">Au</label>
+                            <div class="form-group">
+                                <input  type="Date" id="search_date_to" style="width: 160px; margin-top: 15px;"   class="form-control" :class="{ 'is-invalid': form.errors.has('Date_naissance') }">
+                                <has-error :form="form" ></has-error>
+                            </div>
+                            <button @click="getDemandesByDate()" class="btn btn-navbar" >
+                                <i class="fa fa-search"></i>
+                            </button>
+                            <span>|</span>
+                            
+                            <input class="btn btn-primary" style="width:100px;" type="reset" value="réinitialiser" @click="reset('all')">
+
                         </div>
                     </div>
                     <!-- /.card-header -->
@@ -14,7 +50,7 @@
                         <table class="table table-hover">
                             <tbody>
                                 <tr>
-                                    <th>utilisateur</th>
+                                    <th>Utilisateur</th>
                                     <th>Type</th>
                                     <th>Date de début</th>
                                     <th>Date de fin</th>
@@ -192,8 +228,17 @@
 
 <script>
 export default {
+         watch: {
+            keyword(after, before) {
+                if(this.keyword == ""){
+                    Fire.$emit('AfterCreate');
+                }
+                this.getDemandesByName();
+            }
+        },
         data() {
             return {
+                keyword: null,
                 etat1:null,
                 etat2:null,
                 etat3:null,
@@ -217,6 +262,34 @@ export default {
             
         },
         methods: {
+            getDemandesByType(){
+                var type = document.getElementById("selectType").value;
+                axios.get("api/listeDemandesDivision/demande_conge/byType/"+type).then(({ data }) => (this.conges = data))
+            },
+            getDemandesByName(){
+                this.$Progress.start();
+                var nom = document.getElementById("shearchField").value;
+                axios.get("api/listeDemandesDivision/demande_conge/byName/"+nom).then(({ data }) => (this.conges = data));
+                this.$Progress.finish();
+            },
+            getDemandesByDate(){
+                var date_from = document.getElementById("search_date_from").value;
+                var date_to = document.getElementById("search_date_to").value;
+
+                this.$Progress.start();
+
+                axios.get('api/listeDemandesDivision/demande_conge/byDate/' + date_from + '/' + date_to).then(
+                    ({ data }) => (this.conges = data),
+                    this.$Progress.finish()
+                ).catch(() => {
+                    this.$Progress.fail(),
+                    swal.fire({
+                    title: 'ooops !',
+                    text: 'Veuillez choisir une date.',
+                    confirmButtonColor:'#d33',
+                    confirmButtonText: 'Ok'
+                })});
+            },
             loadDemandeConge(){
                 axios.get("api/loadDemandeCongeChef/").then(({ data }) => (this.conges=data.data))
             },
@@ -308,7 +381,38 @@ export default {
                 }
                 return false;
                 */
-            }
+            },
+            reset(valeur){
+
+                if(valeur != 'type' || valeur == 'all')
+                    $('#selectType').prop('selectedIndex',0);
+
+                if(valeur != 'search' || valeur == 'all')
+                    this.keyword="";   
+                    $('#shearchField').val('');
+
+                if(valeur != 'date_from' || valeur == 'all')
+                    $('#search_date_from').val('');
+
+                if(valeur != 'date_to' || valeur == 'all')
+                    $('#search_date_to').val('');
+                
+                Fire.$emit('AfterCreate');
+
+            },
+            exportExcel(){
+                saveExcel({
+                data: this.conges,
+                fileName: "Demandes-de-congé",
+                columns: [
+                { field: 'utilisateur', title: 'utilisateur' },
+                { field: 'type', title: 'type' },
+                { field: 'date_debut', title: 'Date de début' },
+                { field: 'date_fin', title: 'Date de fin' },
+                { field: 'Commentaire', title: 'Commentaire' }
+
+              ]
+            });},
         },
         created() {
                 this.loadDemandeConge();

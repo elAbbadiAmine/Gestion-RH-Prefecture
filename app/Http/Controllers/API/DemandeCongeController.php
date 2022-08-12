@@ -165,6 +165,10 @@ class DemandeCongeController extends Controller
 
         return ['message' => 'conge Deleted'];
     }
+
+
+    //////////////////////////////////////////////////////////////////////
+
     public function getSoldeByConge($id)
     {
         $conge = Demande_Conge::findOrFail($id);
@@ -211,7 +215,7 @@ class DemandeCongeController extends Controller
        
 
     }
-
+/*
     public function getByName($nom){
 
         $conges = Demande_Conge::latest()->paginate(20);
@@ -231,9 +235,26 @@ class DemandeCongeController extends Controller
     }
     
     public function getByType($type){
-        $conges = DB::table('conges')->where([
-            ['type', '=', $type]
-        ])->get();
+
+        if(Auth::user()->type == "admin"){
+
+            $conges = DB::table('conges')->where('type', '=', $type)->get();
+
+        }else if(Auth::user()->type == "Chef de division"){
+
+            $div = Division::where('Chef_division',Auth::id())->get();
+            $loadusers = DB::table('users')->select('id')->where('Division',$div[0]->id)->get();
+            $idUsers=[];
+            foreach($loadusers as $loaduser){
+                $idUsers[]=$loaduser->id;
+            }
+            $conges = DB::table('conges')->WhereIn('utilisateur',$idUsers)->where('type', '=', $type)->get(); 
+
+        }
+        else if(Auth::user()->type == "Utilisateur"){
+
+            $conges = DB::table('conges')->where('utilisateur',Auth::id())->where('type', '=', $type)->get();           
+        }
         
         foreach($conges as $conge){     
             $utilisateur =  User::findOrFail($conge -> utilisateur); 
@@ -244,7 +265,16 @@ class DemandeCongeController extends Controller
     }
 
     public function getByDate($dateFrom,$dateTo){
-        $conges = DB::table('conges')->where('date_debut', '>=', $dateFrom)->where('date_fin', '<=', $dateTo)->get();
+
+        if(Auth::user()->type == "admin"){
+            $conges = DB::table('conges')->where('date_debut', '>=', $dateFrom)->where('date_fin', '<=', $dateTo)->get();
+        }else if(Auth::user()->type == "chef de division"){
+            $conges = DB::table('conges')->where('date_debut', '>=', $dateFrom)->where('date_fin', '<=', $dateTo)->get();           
+        }
+        else if(Auth::user()->type == "utilisateur"){
+            $conges = DB::table('conges')->where('utilisateur',Auth::id())->where('date_debut', '>=', $dateFrom)->where('date_fin', '<=', $dateTo)->get();           
+        }
+
         
         foreach($conges as $conge){     
             $utilisateur =  User::findOrFail($conge -> utilisateur); 
@@ -253,6 +283,35 @@ class DemandeCongeController extends Controller
         
         return $conges;
     }
+*/
+    //////////////////////////////////////////////////////////////////////
+
+
+
+    public function getByType($type){
+
+        $conges = DB::table('conges')->where('utilisateur',Auth::id())->where('type', '=', $type)->get();           
+        
+        foreach($conges as $conge){     
+            $utilisateur =  User::findOrFail($conge -> utilisateur); 
+            $conge -> utilisateur = $utilisateur ? $utilisateur->nom." ".$utilisateur->prenom : '';    
+        }
+        
+        return $conges;
+    }
+
+    public function getByDate($dateFrom,$dateTo){
+
+        $conges = DB::table('conges')->where('utilisateur',Auth::id())->where('date_debut', '>=', $dateFrom)->where('date_fin', '<=', $dateTo)->get();           
+
+        foreach($conges as $conge){     
+            $utilisateur =  User::findOrFail($conge -> utilisateur); 
+            $conge -> utilisateur = $utilisateur ? $utilisateur->nom." ".$utilisateur->prenom : '';    
+        }
+        
+        return $conges;
+    }
+
 
 
 }

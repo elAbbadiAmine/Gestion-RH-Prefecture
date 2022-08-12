@@ -104,7 +104,7 @@ class DemandeRhController extends Controller
         return ['message' => 'rh Deleted'];
 
     }
-
+/*
     public function getByName($nom){
 
         $rhs = Demande_RH::latest()->paginate(20);
@@ -139,6 +139,38 @@ class DemandeRhController extends Controller
     public function getByLangue($langue){
 
         $rhs = DB::table('demanderh')->where([
+            ['langue', '=', $langue]
+        ])->get();
+        
+        foreach($rhs as $rh){     
+            $utilisateur =  User::findOrFail($rh -> utilisateur); 
+            $rh -> utilisateur = $utilisateur ? $utilisateur->nom." ".$utilisateur->prenom : '';    
+        }
+        
+        return $rhs;
+    }
+    */
+
+    public function getByType($type){
+
+        $rhs = DB::table('demanderh')->where([
+            ['utilisateur',Auth::id()],
+            ['type', '=', $type]
+        ])->get();
+        
+        foreach($rhs as $rh){     
+            $utilisateur =  User::findOrFail($rh -> utilisateur); 
+            $rh -> utilisateur = $utilisateur ? $utilisateur->nom." ".$utilisateur->prenom : '';    
+        }
+        
+        return $rhs;
+    }
+
+
+    public function getByLangue($langue){
+
+        $rhs = DB::table('demanderh')->where([
+            ['utilisateur',Auth::id()],
             ['langue', '=', $langue]
         ])->get();
         

@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Auth;
 use App\Exports\UserExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
+use Barryvdh\DomPDF\Facade as PDF;
+
+
 
 class UserController extends Controller
 {
@@ -69,8 +73,7 @@ class UserController extends Controller
             'Date_recrutement' => 'required',
             'type' => 'required'
 
-        ],
-        [
+        ],[
             'password.min' => 'Pour des raisons de sécurité, votre mot de passe doit faire :min caractères.',
             'password.required' => 'Le Mot de passe est obligatoire.',
 
@@ -97,8 +100,8 @@ class UserController extends Controller
 
             
        
-        ]
-    );
+        ]);
+
         $newUser = new User();
         $newUser->nom = $request['nom'];
         $newUser->prenom = $request['prenom'];
@@ -274,7 +277,6 @@ class UserController extends Controller
         return ['data' => $users];
     }
 
-
     public function getUsersByDiv($id){
         $users = User::latest()->paginate(20);
         $results=[];
@@ -341,7 +343,6 @@ class UserController extends Controller
         
         return $resultas;
     }
-
     
     public function getUsersByDate($dateFrom,$dateTo){
 
@@ -361,8 +362,7 @@ class UserController extends Controller
         
         return $resultas;
     }
-    
-    
+      
     public function setSolde(int $idConge, int $nbJours){
 
 
@@ -376,5 +376,34 @@ class UserController extends Controller
 
         $user->save();
     }
+
+    public function download()
+    {
+        $user = Auth::user();
+
+        view()->share('user',$user);
+        
+        $pdf = PDF::loadView('pdf');
+        
+
+        return $pdf->download('user.pdf');
+
+
+        //$pdfContent = PDF::loadView('view', $viewData)->output();
+        //return response()->streamDownload(fn () => print($pdfContent),"filename.pdf");
+
+    }
+    
+    public function getSolde(){
+
+        $user = Auth::user();
+
+        $id = $user->id;
+
+        $user = User::findOrFail($id);
+        
+        return $user->solde;
+    }
+
 
 }

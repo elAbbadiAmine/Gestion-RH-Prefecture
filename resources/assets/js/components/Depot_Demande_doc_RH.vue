@@ -7,13 +7,12 @@
                     <form @submit.prevent=" create_demande()">
                     <div class="card-body">
                     <div>
-                      <div class="form-group " >
+                        <div class="form-group " >
                             <label>Type de document :  </label>
                             <select class='form-control' v-model="form.type">
                                 <option>Certificat de travail</option>
                                 <option>Etat d'engagement</option>
                             </select>
-
                         </div>
                           
                         </div>

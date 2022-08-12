@@ -11,6 +11,7 @@ use App\Demande_RH;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade as PDF;
 
 class DemandeRhAllController extends Controller
 {
@@ -95,4 +96,66 @@ class DemandeRhAllController extends Controller
     {
         //
     }
+
+    public function getByName($nom){
+
+        $rhs = Demande_RH::latest()->paginate(20);
+        $results = [];
+        $nom = strtolower($nom);
+
+        foreach($rhs as $rh){     
+            $utilisateur =  User::findOrFail($rh -> utilisateur); 
+            if(str_contains(strtolower($utilisateur->nom),$nom) == true || str_contains(strtolower($utilisateur->prenom),$nom) == true ){
+                $rh -> utilisateur = $utilisateur ? $utilisateur->nom." ".$utilisateur->prenom : '';
+                $results[] = $rh;
+            }
+    
+        }
+       
+        return $results;
+    }
+    
+    public function getByType($type){
+        $rhs = DB::table('demanderh')->where([
+            ['type', '=', $type]
+        ])->get();
+        
+        foreach($rhs as $rh){     
+            $utilisateur =  User::findOrFail($rh -> utilisateur); 
+            $rh -> utilisateur = $utilisateur ? $utilisateur->nom." ".$utilisateur->prenom : '';    
+        }
+        
+        return $rhs;
+    }
+
+    public function getByLangue($langue){
+
+        $rhs = DB::table('demanderh')->where([
+            ['langue', '=', $langue]
+        ])->get();
+        
+        foreach($rhs as $rh){     
+            $utilisateur =  User::findOrFail($rh -> utilisateur); 
+            $rh -> utilisateur = $utilisateur ? $utilisateur->nom." ".$utilisateur->prenom : '';    
+        }
+        
+        return $rhs;
+    }
+
+    public function pdfview($idRH)  
+    {  
+        $rh = Demande_RH::findOrFail($idRH);
+
+        $user = User::findOrFail($rh->utilisateur);
+
+        view()->share('rh',$rh); 
+
+        view()->share('user',$user);  
+  
+        $pdf = PDF::loadView('PDFdocumentRH'); 
+
+        $name = $user->nom . "-" . $user->prenom . "-" . $rh->type . ".pdf";
+
+        return $pdf->download($name);  
+    }  
 }

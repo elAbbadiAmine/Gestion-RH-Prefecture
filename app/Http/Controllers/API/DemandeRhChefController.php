@@ -104,4 +104,79 @@ class DemandeRhChefController extends Controller
     {
         //
     }
+
+    public function getByName($nom){
+
+        $div = Division::where('Chef_division',Auth::id())->get();
+
+        $loadusers = DB::table('users')->select('id')->where([
+            ['Division', $div[0]->id]
+        ])->where('nom', 'like', '%' . $nom . '%')->orWhere('prenom', 'like', '%' . $nom . '%')->get();
+
+        $idUsers=[];
+
+        foreach($loadusers as $loaduser){
+            $idUsers[]=$loaduser->id;
+        }
+
+        $rhs = DB::table('demanderh')->WhereIn('utilisateur',$idUsers)->get();
+
+
+        foreach($rhs as $rh){  
+            $user = User::findOrFail($rh->utilisateur);   
+            $rh -> utilisateur = $user ? $user->nom." ".$user->prenom : '';
+        }
+    
+        return $rhs;
+    }
+    
+    public function getByType($type){
+
+        $div = Division::where('Chef_division',Auth::id())->get();
+
+        $loadusers = DB::table('users')->select('id')->where([
+            ['Division', $div[0]->id]
+        ])->get();
+
+        $idUsers=[];
+
+        foreach($loadusers as $loaduser){
+            $idUsers[]=$loaduser->id;
+        }
+
+        $rhs = DB::table('demanderh')->WhereIn('utilisateur',$idUsers)->where('type', '=', $type)->get(); 
+
+        
+        foreach($rhs as $rh){     
+            $utilisateur =  User::findOrFail($rh -> utilisateur); 
+            $rh -> utilisateur = $utilisateur ? $utilisateur->nom." ".$utilisateur->prenom : '';    
+        }
+        
+        return $rhs;
+    }
+
+    public function getByLangue($langue){
+        
+        $div = Division::where('Chef_division',Auth::id())->get();
+
+        $loadusers = DB::table('users')->select('id')->where([
+            ['Division', $div[0]->id]
+        ])->get();
+
+        $idUsers=[];
+
+        foreach($loadusers as $loaduser){
+            $idUsers[]=$loaduser->id;
+        }
+
+        $rhs = DB::table('demanderh')->WhereIn('utilisateur',$idUsers)->where('langue', '=', $langue)->get(); 
+
+        
+        foreach($rhs as $rh){     
+            $utilisateur =  User::findOrFail($rh -> utilisateur); 
+            $rh -> utilisateur = $utilisateur ? $utilisateur->nom." ".$utilisateur->prenom : '';    
+        }
+        
+        return $rhs;
+    }
 }

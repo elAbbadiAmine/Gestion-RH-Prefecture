@@ -81,11 +81,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <ul class="nav nav-treeview">
               <li class="nav-item">
                 <router-link to="/Demande_conge" class="nav-link">
-                <i class="fa-solid fa-calendar-days fa-fw" style="margin-left: 15px"></i>
+                <i class="fa-solid fa-calendar-days fa-fw" ></i>
                   <p>Congé</p>
                 </router-link>
                 <router-link to="/Demande_document_RH" class="nav-link" >
-                <i class="fa-solid fa-file fa-fw" style="margin-left: 15px"></i>
+                <i class="fa-solid fa-file fa-fw" ></i>
                   <p>Document RH</p>
                 </router-link>
               </li>
@@ -105,11 +105,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <ul class="nav nav-treeview">
             <li class="nav-item">
               <router-link to="/Demande_conge" class="nav-link">
-              <i class="fa-solid fa-calendar-days fa-fw" style="margin-left: 15px"></i>
+              <i class="fa-solid fa-calendar-days fa-fw" ></i>
                 <p>Congé</p>
               </router-link>
               <router-link to="/Demande_document_RH" class="nav-link" >
-              <i class="fa-solid fa-file fa-fw" style="margin-left: 15px"></i>
+              <i class="fa-solid fa-file fa-fw" ></i>
                 <p>Document RH</p>
               </router-link>
             </li>
@@ -129,11 +129,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <ul class="nav nav-treeview">
               <li class="nav-item">
                 <router-link to="/Depot_Demande_conge" class="nav-link">
-                <i class="fa-solid fa-calendar-days fa-fw" style="margin-left: 15px"></i>
+                <i class="fa-solid fa-calendar-days fa-fw" ></i>
                   <p>Congé</p>
                 </router-link>
                 <router-link to="/Depot_Demande_document_RH" class="nav-link">
-                <i class="fa-solid fa-file fa-fw" style="margin-left: 15px"></i>
+                <i class="fa-solid fa-file fa-fw" ></i>
                   <p>Document RH</p>
                 </router-link>
               </li>
