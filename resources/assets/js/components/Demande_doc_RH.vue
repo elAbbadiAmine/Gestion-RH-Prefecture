@@ -53,9 +53,9 @@
                                     <a href="#" @click=" viewDemande(rh), hideMenu()">
                                         <i class="fa fa-eye green"></i>
                                     </a>
-                                    / 
-                                    <a  title="Exporter le document" @click=" printPDF(rh.id) , hideMenu()">
-                                        <i class="fa fa-download blue"></i>
+                                    /
+                                    <a href="#" @click="etatDemande(rh) ,  hideMenu()">
+                                        <i class="fa fa-circle-check blue"></i>                                       
                                     </a>
                                     /
                                     <a href="#" @click="deleteDemande(rh.id) , hideMenu()">
@@ -118,6 +118,51 @@
             </div>
             </div>
         </div>
+
+        
+        <div class="modal fade" id="TraitementDemnde" tabindex="-1" role="dialog" aria-labelledby="addNewLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title" v-show="editmode" id="addNewLabel">Traitement</h2>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="addNew">
+                        <div class="container-fluid">                 
+                            <ul class="step-wizard-list">
+
+                                    <li class="step-wizard-item ">
+                                    <span class="progress-count">1</span>
+                                    <span class="progress-label">Demande en Cours de Traitement</span>
+                                    <span v-if="this.etat1 != null" class="progress-label">{{(this.etat1.created_at).split(" ")[0]}}</span>
+                                    <span v-else class="progress-label">-</span>                            
+                                    </li>
+
+                                    <li v-if = "this.etat2 == null" class="step-wizard-item current-item">
+                                    <span class="progress-count">2</span>
+                                    <span class="progress-label">Demande Traitée Par l'Admin</span>
+                                    <span class="progress-label">-</span>
+                                    </li>
+
+                                    <li v-else class="step-wizard-item ">
+                                    <span class="progress-count">2</span>
+                                    <span class="progress-label">Demande Traitée Par l'Admin</span>
+                                    <span v-if="this.etat2 != null" class="progress-label">{{(this.etat2.created_at).split(" ")[0]}}</span>
+                                    </li>
+                            </ul>
+                        </div>
+
+                    </div>
+                <div class="modal-footer">
+                    <button v-if="this.etat2 != null" @click="printPDF()"  type="button" class="btn btn-success" data-dismiss="modal">Télécharger la demande</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
+                </div>
+                </div> 
+
+            </div>
+        </div>
     </div>
 </template>
 
@@ -129,6 +174,9 @@ import { Grid } from '@progress/kendo-vue-grid';
 export default {
       data(){
             return{
+                etat1:null,
+                etat2:null,
+                idDocument:null,
                 menu : null,
                 editmode: false,
                 demanderh: {},
@@ -142,7 +190,18 @@ export default {
         
 
       },
-      methods: {
+      methods: { 
+
+            etatDemande(rh){
+                this.etat1 = null;
+                this.etat2 = null;
+                this.idDocument = rh.id;
+
+                axios.get("api/getDocumentEtat/"+this.idDocument).then(({ data }) => (
+                    this.etat1 = data.DocumentEtat1[0],
+                    this.etat2 = data.DocumentEtat2[0]
+                )).then($('#TraitementDemnde').modal('show'));
+            },
             loadDemandeRh(){
                 axios.get("api/mesDemandes/demande_rh/loadDemandeRh/").then(({ data }) => (this.demanderh=data.data))
             },
@@ -154,7 +213,7 @@ export default {
             },
             deleteDemande(id){
                 swal.fire({
-                    title: 'Êtes-vous sûr?',
+                    title:'Êtes-vous sûr?',
                     text: "vous ne pourrez pas revenir en arrière !",
                     type: 'Attention',
                     showCancelButton: true,
@@ -182,9 +241,6 @@ export default {
                 $('#viewDemande').modal('show');
                 this.form.fill(rh);
                 this.form.created_at = this.form.created_at.split(" ")[0];
-            },
-            etatDemande(){
-
             },
             reset(valeur){
 
@@ -215,8 +271,8 @@ export default {
                 var Langue = document.getElementById("selectLangue").value;
                 axios.get("api/mesDemandes/demande_rh/byLangue/"+Langue).then(({ data }) => (this.demanderh = data))
             },
-            printPDF(id){
-	            window.location.href = "pdfview/"+id;
+            printPDF(){
+	            window.location.href = "pdfview/"+this.idDocument;
             }
 
         },

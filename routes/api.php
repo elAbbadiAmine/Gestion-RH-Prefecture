@@ -127,6 +127,9 @@ Route::get('getCongeEtat/{idConge}','API\DemandeCongeController@getEtat');
 Route::post('setCongeEtat/{idConge}/{idEtat}','API\DemandeCongeController@setEtat');
 
 
+Route::get('getDocumentEtat/{idDocument}','API\DemandeRhController@getEtat');
+Route::post('setDocumentEtat/{idDocument}/{idEtat}','API\DemandeRhController@setEtat');
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

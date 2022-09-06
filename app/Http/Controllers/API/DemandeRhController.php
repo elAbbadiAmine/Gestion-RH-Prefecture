@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Service;
 use App\User;
 use App\Division;
-use App\Demande_Conge;
 use App\Demande_rh;
+use App\DocumentEtat;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -53,6 +53,12 @@ class DemandeRhController extends Controller
         $demandeRH -> langue = $request['langue'];
         $demandeRH -> Commentaire = $request['Commentaire'];
         $demandeRH -> save();
+
+        // ajouter documentEtat nº 1
+        $DocumentEtat = new DocumentEtat();
+        $DocumentEtat->id_document = $demandeRH->id;
+        $DocumentEtat->id_etat = 1;
+        $DocumentEtat->save();
     }
 
     /**
@@ -180,5 +186,40 @@ class DemandeRhController extends Controller
         }
         
         return $rhs;
+    }
+
+
+    public  function getEtat( int $idDocument )
+    {
+        $DocumentEtat1 = null;
+        $DocumentEtat2 = null;
+
+        $DocumentEtat1 = DB::table('document_etat')->where([
+            ['id_document', '=', $idDocument],
+            ['id_etat', '=', '1']
+        ])->get();
+
+        $DocumentEtat2 = DB::table('document_etat')->where([
+            ['id_document', '=', $idDocument],
+            ['id_etat', '=', '2']
+        ])->get();
+
+
+   
+        return ['DocumentEtat1' =>  $DocumentEtat1 , 'DocumentEtat2' =>  $DocumentEtat2];
+
+    }
+
+
+    public  function setEtat( int $idDocument , int $idEtat)
+    {
+        // ajouter congéEtat
+        $DocumentEtat = new DocumentEtat();
+        $DocumentEtat->id_document = $idDocument;
+        //$intitulé = 'Nouvelle demande';
+        //$etat = Etat::findOrFail($intitulé);
+        $DocumentEtat->id_etat = $idEtat;//$etat->id_etat ;
+        $DocumentEtat->save();
+       
     }
 }
