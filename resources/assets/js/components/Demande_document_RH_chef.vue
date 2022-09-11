@@ -37,7 +37,6 @@
 
                     </div>
                 </div>
-                    <!-- /.card-header -->
                     <div class="card-body table-responsive p-0">
                         <table class="table table-hover">
                             <tbody>
@@ -74,7 +73,6 @@
                 </div>
             </div>
         </div>
-     <!-- Afficher info Modal-->
         <div class="modal fade" id="viewDemande" tabindex="-1" role="dialog" aria-labelledby="addNewLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
           <div class="modal-content">
@@ -304,7 +302,6 @@ export default {
                 
 
            });
-        //    setInterval(() => this.loadServices(), 3000);
             }
 }
 </script>

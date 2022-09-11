@@ -152,7 +152,6 @@
                   </div>
               </div> 
               <div class="modal-footer">
-                    <button v-if="this.etat3 != null" @click="telechargerDemande()"  type="button" class="btn btn-success" data-dismiss="modal">Télécharger la demande</button>
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
               </div>
             </div>
@@ -205,9 +204,6 @@ export default {
             
         },
         methods: {
-            telechargerDemande(){
-
-            },
             loadDemandeConge(){
                 axios.get("api/loadDemandeConge/").then(({ data }) => (this.conges=data.data))
             },
